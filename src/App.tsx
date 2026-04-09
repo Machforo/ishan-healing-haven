@@ -25,45 +25,52 @@ const Loading = () => (
   </div>
 );
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about/why-ishan" element={<WhyIshan />} />
-            <Route path="/about/ishan-group" element={<WhyIshan />} />
-            <Route path="/about/accreditations" element={<WhyIshan />} />
-            <Route path="/doctors" element={<Doctors />} />
-            <Route path="/appointment" element={<Appointment />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/departments" element={<DepartmentsPage />} />
-            <Route path="/departments/:slug" element={<DepartmentDetail />} />
-            <Route path="/panchkarma" element={<PanchkarmaDetail />} />
-            <Route path="/panchkarma/:slug" element={<PanchkarmaDetail />} />
-            <Route path="/patient-services" element={<PatientServices />} />
-            <Route path="/patient-services/faqs" element={<PatientFAQs />} />
-            {/* Placeholder routes for remaining pages */}
-            <Route path="/patient-services/*" element={<PatientServices />} />
-            <Route path="/patient-portal" element={<PatientServices />} />
-            <Route path="/careers" element={<PatientServices />} />
-            <Route path="/feedback" element={<Contact />} />
-            <Route path="/downloads" element={<PatientServices />} />
-            <Route path="/disclosure" element={<WhyIshan />} />
-            <Route path="/privacy-policy" element={<PatientFAQs />} />
-            <Route path="/anti-ragging" element={<PatientFAQs />} />
-            <Route path="/grievance" element={<PatientFAQs />} />
-            <Route path="/posh-policy" element={<PatientFAQs />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+import { ConsultationModal, useTimedConsultationPopup } from "./components/ConsultationModal";
+
+const App = () => {
+  const { isOpen, setIsOpen } = useTimedConsultationPopup();
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ConsultationModal open={isOpen} onOpenChange={setIsOpen} />
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/about/why-ishan" element={<WhyIshan />} />
+              <Route path="/about/ishan-group" element={<WhyIshan />} />
+              <Route path="/about/accreditations" element={<WhyIshan />} />
+              <Route path="/doctors" element={<Doctors />} />
+              <Route path="/appointment" element={<Appointment />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/departments" element={<DepartmentsPage />} />
+              <Route path="/departments/:slug" element={<DepartmentDetail />} />
+              <Route path="/panchkarma" element={<PanchkarmaDetail />} />
+              <Route path="/panchkarma/:slug" element={<PanchkarmaDetail />} />
+              <Route path="/patient-services" element={<PatientServices />} />
+              <Route path="/patient-services/faqs" element={<PatientFAQs />} />
+              {/* Placeholder routes for remaining pages */}
+              <Route path="/patient-services/*" element={<PatientServices />} />
+              <Route path="/patient-portal" element={<PatientServices />} />
+              <Route path="/careers" element={<PatientServices />} />
+              <Route path="/feedback" element={<Contact />} />
+              <Route path="/downloads" element={<PatientServices />} />
+              <Route path="/disclosure" element={<WhyIshan />} />
+              <Route path="/privacy-policy" element={<PatientFAQs />} />
+              <Route path="/anti-ragging" element={<PatientFAQs />} />
+              <Route path="/grievance" element={<PatientFAQs />} />
+              <Route path="/posh-policy" element={<PatientFAQs />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
