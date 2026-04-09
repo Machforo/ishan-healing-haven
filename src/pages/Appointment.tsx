@@ -32,18 +32,18 @@ const Appointment = () => {
 
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
             Book an Appointment
           </h1>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
             Fill the form below and our counsellor will call you within 2 hours to confirm your appointment.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container max-w-3xl">
           {submitted ? (
             <ScrollReveal>
@@ -56,7 +56,7 @@ const Appointment = () => {
             </ScrollReveal>
           ) : (
             <ScrollReveal>
-              <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-8 shadow-elevated space-y-5 border border-border/50">
+              <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated space-y-5 border border-border/50">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-1.5">Full Name *</label>

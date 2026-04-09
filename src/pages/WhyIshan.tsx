@@ -14,18 +14,18 @@ const reasons = [
 const WhyIshan = () => {
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
             Why Ishan Ayurvedic Hospital?
           </h1>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
             The only private NCISM-approved Ayurvedic teaching hospital in Delhi NCR offering world-class holistic care.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container">
           <div className="grid md:grid-cols-2 gap-8 mb-16">
             {reasons.map((r, i) => (
@@ -44,7 +44,7 @@ const WhyIshan = () => {
           </div>
 
           <ScrollReveal>
-            <div className="bg-muted/50 rounded-2xl p-10">
+            <div className="bg-muted/50 rounded-2xl p-6 sm:p-10">
               <h2 className="font-serif text-2xl font-bold text-foreground mb-5">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Ishan Ayurvedic Hospital is committed to bringing the ancient science of Ayurveda to the modern world. As the teaching hospital of Ishan Ayurvedic Medical College, we combine rigorous academic training with compassionate patient care.

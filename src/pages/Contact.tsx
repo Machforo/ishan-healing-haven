@@ -18,20 +18,20 @@ const contactInfo = [
 const Contact = () => {
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
             Contact Us
           </h1>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
             Reach us for appointments, enquiries, or directions. We&apos;re here to help.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container">
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
             <ScrollReveal>
               <div>
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Get In Touch</h2>
@@ -59,7 +59,7 @@ const Contact = () => {
             </ScrollReveal>
 
             <ScrollReveal delay={200}>
-              <div className="bg-card rounded-2xl p-8 shadow-elevated border border-border/50">
+              <div className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated border border-border/50">
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
                 <form className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -77,7 +77,7 @@ const Contact = () => {
 
           {/* Map */}
           <ScrollReveal>
-            <div className="mt-16 rounded-2xl overflow-hidden shadow-elevated h-80">
+            <div className="mt-10 sm:mt-16 rounded-2xl overflow-hidden shadow-elevated h-64 sm:h-80">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.5!2d77.49!3d28.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sIshan+Institute!5e0!3m2!1sen!2sin!4v1"
                 width="100%"

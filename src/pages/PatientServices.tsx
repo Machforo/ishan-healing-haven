@@ -16,16 +16,16 @@ const services = [
 const PatientServices = () => {
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Patient Services</h1>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Patient Services</h1>
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
             Everything you need for a seamless healthcare experience at Ishan Ayurvedic Hospital.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((s, i) => (

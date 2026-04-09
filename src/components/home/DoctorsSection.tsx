@@ -54,7 +54,7 @@ const DoctorsSection = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
 
   return (
-    <section className="py-20 bg-muted/50">
+    <section className="py-12 sm:py-20 bg-muted/50">
       <ConsultationModal 
         open={!!selectedDoctor} 
         onOpenChange={(open) => !open && setSelectedDoctor(null)} 
@@ -62,9 +62,9 @@ const DoctorsSection = () => {
       />
       <div className="section-container">
         <ScrollReveal>
-          <div className="text-center mb-14">
-            <span className="text-sm font-semibold text-accent uppercase tracking-wider">Expert Care</span>
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4">
+          <div className="text-center mb-10 sm:mb-14">
+            <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">Expert Care</span>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4">
               Meet Our Ayurvedic Doctors
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">

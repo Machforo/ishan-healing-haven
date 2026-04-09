@@ -91,42 +91,43 @@ const Doctors = () => {
         onOpenChange={(open) => !open && setSelectedDoctor(null)} 
         doctorName={selectedDoctor || undefined}
       />
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
             Our Medical Team
           </h1>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
             Qualified MD/MS Ayurveda practitioners with extensive clinical experience.
           </p>
         </div>
       </section>
-
-      <section className="py-20">
+ 
+      <section className="py-12 sm:py-20">
         <div className="section-container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {allDoctors.map((doc, i) => (
               <ScrollReveal key={doc.name} delay={i * 80}>
-                <div className="bg-card rounded-xl overflow-hidden shadow-soft border border-border/50 hover:shadow-elevated transition-all duration-300 flex">
-                  <div className="w-40 overflow-hidden shrink-0">
+                <div className="bg-card rounded-xl overflow-hidden shadow-soft border border-border/50 hover:shadow-elevated transition-all duration-300 flex flex-col xs:flex-row">
+                  <div className="w-full xs:w-40 h-48 xs:h-auto overflow-hidden shrink-0">
                     <img 
                       src={doc.image} 
                       alt={doc.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="p-5 flex-1">
+                  <div className="p-5 flex-1 flex flex-col justify-between">
                     <h3 className="font-serif text-lg font-semibold text-foreground">{doc.name}</h3>
                     <p className="text-sm text-primary font-medium">{doc.dept}</p>
                     <p className="text-xs text-muted-foreground mt-1">{doc.qual} · {doc.exp}</p>
                     <p className="text-sm text-foreground/70 mt-2 leading-relaxed">{doc.bio}</p>
-                    <div className="flex items-center justify-between mt-3">
-                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                        <Calendar className="w-3 h-3" /> {doc.days}
+                    <div className="flex items-center justify-between mt-4">
+                      <span className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">
+                        <Calendar className="w-3.5 h-3.5" /> {doc.days}
                       </span>
                       <Button 
-                        variant="outline-primary" 
+                        variant="gold" 
                         size="sm"
+                        className="h-8 px-4 text-xs font-bold"
                         onClick={() => setSelectedDoctor(doc.name)}
                       >
                         Book

@@ -23,16 +23,16 @@ const faqs = [
 const PatientFAQs = () => {
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Patient FAQs</h1>
-          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Patient FAQs</h1>
+          <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
             Common questions about Ayurvedic treatment at Ishan Hospital.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container max-w-3xl">
           <ScrollReveal>
             <Accordion type="single" collapsible className="space-y-3">

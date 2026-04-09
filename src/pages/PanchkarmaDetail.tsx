@@ -66,20 +66,20 @@ const PanchkarmaDetail = () => {
     // Overview page
     return (
       <Layout>
-        <section className="gradient-primary py-20">
+        <section className="gradient-primary py-12 sm:py-20">
           <div className="section-container text-center">
-            <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Panchkarma Therapies</h1>
-            <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Panchkarma Therapies</h1>
+            <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
               The five classical purification therapies of Ayurveda for deep detoxification and rejuvenation.
             </p>
           </div>
         </section>
 
-        <section className="py-20">
+        <section className="py-12 sm:py-20">
           <div className="section-container">
             <ScrollReveal>
-              <div className="bg-muted/50 rounded-2xl p-8 mb-12">
-                <h2 className="font-serif text-2xl font-bold text-foreground mb-4">What is Panchkarma?</h2>
+              <div className="bg-muted/50 rounded-2xl p-6 sm:p-8 mb-12">
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-foreground mb-4">What is Panchkarma?</h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Panchkarma literally means &ldquo;five actions&rdquo; — a comprehensive system of Ayurvedic detoxification that cleanses the body of accumulated toxins (Ama) and restores the natural balance of the three doshas: Vata, Pitta, and Kapha.
                 </p>
@@ -110,16 +110,16 @@ const PanchkarmaDetail = () => {
 
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-2">{therapy.name}</h1>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-2">{therapy.name}</h1>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container max-w-4xl">
           <ScrollReveal>
-            <p className="text-muted-foreground leading-relaxed text-lg mb-10">{therapy.description}</p>
+            <p className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">{therapy.description}</p>
           </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-8 mb-10">

@@ -34,17 +34,17 @@ const Footer = () => {
   return (
     <footer className="bg-foreground text-primary-foreground">
       {/* CTA Banner */}
-      <div className="gradient-gold py-10">
+      <div className="gradient-gold py-12 sm:py-16">
         <div className="section-container text-center">
-          <h3 className="font-serif text-2xl md:text-3xl font-bold text-foreground mb-3">
+          <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
             Experience the Healing Power of Ayurveda
           </h3>
-          <p className="text-foreground/80 mb-6 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-foreground/80 mb-8 max-w-xl mx-auto px-4">
             Book your consultation today and take the first step towards holistic wellness.
           </p>
           <Link
             to="/appointment"
-            className="inline-flex items-center gap-2 gradient-primary text-primary-foreground px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all hover:scale-105"
+            className="inline-flex items-center justify-center gap-2 gradient-primary text-primary-foreground px-8 py-4 rounded-lg font-bold shadow-soft hover:opacity-90 transition-all hover:scale-105 w-full sm:w-auto overflow-hidden text-sm sm:text-base"
           >
             Book Appointment Now
           </Link>
@@ -52,13 +52,13 @@ const Footer = () => {
       </div>
 
       {/* Main footer */}
-      <div className="section-container py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="section-container py-12 sm:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <div>
-          <Link to="/" className="flex items-center gap-3 mb-5">
-            <img src={logo} alt="Ishan" className="h-14 w-auto brightness-200" />
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 mb-5">
+            <img src={logo} alt="Ishan" className="h-12 sm:h-14 w-auto brightness-200" />
             <div>
-              <div className="font-serif text-lg font-bold">Ishan Ayurvedic</div>
-              <div className="text-xs text-primary-foreground/60">Hospital & Panchkarma Centre</div>
+              <div className="font-serif text-base sm:text-lg font-bold">Ishan Ayurvedic</div>
+              <div className="text-[10px] sm:text-xs text-primary-foreground/60 whitespace-nowrap">Hospital & Panchkarma Centre</div>
             </div>
           </Link>
           <p className="text-sm text-primary-foreground/70 leading-relaxed mb-5">
@@ -70,16 +70,17 @@ const Footer = () => {
                 key={i}
                 href="#"
                 className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary transition-colors"
+                aria-label={`Visit our ${Icon.name} page`}
               >
                 <Icon className="w-4 h-4" />
               </a>
             ))}
           </div>
         </div>
-
+ 
         <div>
-          <h4 className="font-serif text-lg font-semibold mb-5">Quick Links</h4>
-          <ul className="space-y-2.5">
+          <h4 className="font-serif text-lg font-semibold mb-5 pb-2 border-b border-primary-foreground/10 sm:border-0">Quick Links</h4>
+          <ul className="grid grid-cols-2 sm:grid-cols-1 gap-2.5">
             {quickLinks.map((link) => (
               <li key={link.path}>
                 <Link to={link.path} className="text-sm text-primary-foreground/70 hover:text-accent transition-colors">
@@ -89,10 +90,10 @@ const Footer = () => {
             ))}
           </ul>
         </div>
-
+ 
         <div>
-          <h4 className="font-serif text-lg font-semibold mb-5">Patient Services</h4>
-          <ul className="space-y-2.5">
+          <h4 className="font-serif text-lg font-semibold mb-5 pb-2 border-b border-primary-foreground/10 sm:border-0">Patient Services</h4>
+          <ul className="grid grid-cols-2 sm:grid-cols-1 gap-2.5">
             {patientLinks.map((link) => (
               <li key={link.path}>
                 <Link to={link.path} className="text-sm text-primary-foreground/70 hover:text-accent transition-colors">
@@ -102,9 +103,9 @@ const Footer = () => {
             ))}
           </ul>
         </div>
-
+ 
         <div>
-          <h4 className="font-serif text-lg font-semibold mb-5">Contact Us</h4>
+          <h4 className="font-serif text-lg font-semibold mb-5 pb-2 border-b border-primary-foreground/10 sm:border-0">Contact Us</h4>
           <div className="space-y-4 text-sm text-primary-foreground/70">
             <div className="flex gap-3">
               <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
@@ -125,16 +126,16 @@ const Footer = () => {
           </div>
         </div>
       </div>
-
+ 
       {/* Bottom bar */}
       <div className="border-t border-primary-foreground/10">
-        <div className="section-container py-5 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-primary-foreground/50">
+        <div className="section-container py-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-[10px] sm:text-xs text-primary-foreground/50 text-center md:text-left order-2 md:order-1">
             © {new Date().getFullYear()} Ishan Ayurvedic Hospital. All rights reserved. Part of Ishan Educational Institutions.
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 order-1 md:order-2">
             {legalLinks.map((link) => (
-              <Link key={link.path} to={link.path} className="text-xs text-primary-foreground/50 hover:text-accent transition-colors">
+              <Link key={link.path} to={link.path} className="text-[10px] sm:text-xs text-primary-foreground/50 hover:text-accent transition-colors whitespace-nowrap">
                 {link.label}
               </Link>
             ))}

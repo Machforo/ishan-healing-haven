@@ -90,16 +90,16 @@ const Header = () => {
 
       {/* Main nav */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
+        className={`sticky top-0 z-50 relative transition-all duration-300 ${
           scrolled ? "bg-card/95 backdrop-blur-lg shadow-soft" : "bg-card"
         }`}
       >
         <div className="section-container flex items-center justify-between h-16 lg:h-20">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Ishan Ayurvedic Hospital" className="h-12 lg:h-14 w-auto" />
-            <div className="hidden sm:block">
-              <div className="font-serif text-lg font-bold text-foreground leading-tight">Ishan Ayurvedic</div>
-              <div className="text-xs text-muted-foreground">Hospital & Panchkarma Centre</div>
+          <Link to="/" className="flex items-center gap-2 sm:gap-3">
+            <img src={logo} alt="Ishan Ayurvedic Hospital" className="h-10 sm:h-12 lg:h-14 w-auto" />
+            <div className="hidden xs:block sm:block">
+              <div className="font-serif text-sm sm:text-lg font-bold text-foreground leading-tight">Ishan Ayurvedic</div>
+              <div className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">Hospital & Panchkarma Centre</div>
             </div>
           </Link>
 
@@ -159,23 +159,23 @@ const Header = () => {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="lg:hidden bg-card border-t border-border animate-fade-in">
-            <div className="section-container py-4 space-y-1">
+          <div className="lg:hidden absolute top-full left-0 w-full bg-card border-t border-border shadow-elevated animate-fade-in z-[60] max-h-[calc(100vh-5rem)] overflow-y-auto">
+            <div className="section-container py-6 space-y-4">
               {navItems.map((item) => (
-                <div key={item.label}>
+                <div key={item.label} className="space-y-2">
                   <Link
                     to={item.path}
-                    className="block px-4 py-3 text-sm font-medium rounded-md hover:bg-primary/5 hover:text-primary transition-colors"
+                    className="block px-4 py-2 text-base font-semibold text-foreground hover:text-primary transition-colors"
                   >
                     {item.label}
                   </Link>
                   {item.children && (
-                    <div className="pl-6 space-y-1">
+                    <div className="pl-6 border-l-2 border-primary/10 space-y-1">
                       {item.children.map((child) => (
                         <Link
                           key={child.path}
                           to={child.path}
-                          className="block px-4 py-2 text-xs text-muted-foreground hover:text-primary transition-colors"
+                          className="block px-4 py-2 text-sm text-muted-foreground hover:text-primary transition-colors"
                         >
                           {child.label}
                         </Link>
@@ -184,9 +184,13 @@ const Header = () => {
                   )}
                 </div>
               ))}
-              <Link to="/appointment" className="block px-4 pt-2">
-                <Button variant="hero" className="w-full">Book Appointment</Button>
-              </Link>
+              <div className="px-4 pt-4 pb-2">
+                <Link to="/appointment">
+                  <Button variant="hero" className="w-full py-6 text-base shadow-soft">
+                    Book Appointment
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

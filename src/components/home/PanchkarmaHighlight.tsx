@@ -14,7 +14,7 @@ const benefits = [
 
 const PanchkarmaHighlight = () => {
   return (
-    <section className="py-20">
+    <section className="py-12 sm:py-20">
       <div className="section-container">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <ScrollReveal>
@@ -27,17 +27,17 @@ const PanchkarmaHighlight = () => {
                 width={1280}
                 height={720}
               />
-              <div className="absolute -bottom-4 -right-4 gradient-gold rounded-xl px-6 py-4 shadow-gold">
-                <div className="font-serif text-2xl font-bold text-foreground">7+</div>
-                <div className="text-sm text-foreground/80">Panchkarma Therapies</div>
+              <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 gradient-gold rounded-xl px-4 sm:px-6 py-3 sm:py-4 shadow-gold">
+                <div className="font-serif text-xl sm:text-2xl font-bold text-foreground">7+</div>
+                <div className="text-xs sm:text-sm text-foreground/80">Panchkarma Therapies</div>
               </div>
             </div>
           </ScrollReveal>
 
           <ScrollReveal delay={200}>
             <div>
-              <span className="text-sm font-semibold text-accent uppercase tracking-wider">Signature Treatment</span>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mt-2 mb-5">
+              <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">Signature Treatment</span>
+              <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mt-2 mb-5">
                 Panchkarma Therapy Centre
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
@@ -51,14 +51,14 @@ const PanchkarmaHighlight = () => {
                   </li>
                 ))}
               </ul>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/panchkarma">
-                  <Button variant="hero" size="lg">
+                  <Button variant="hero" size="lg" className="w-full sm:w-auto">
                     Explore Panchkarma <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
                 <Link to="/appointment">
-                  <Button variant="outline-primary" size="lg">
+                  <Button variant="outline-primary" size="lg" className="w-full sm:w-auto">
                     Book Therapy
                   </Button>
                 </Link>

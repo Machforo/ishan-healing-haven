@@ -79,17 +79,17 @@ const DepartmentDetail = () => {
 
   return (
     <Layout>
-      <section className="gradient-primary py-20">
+      <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary-foreground mb-2">{dept.name}</h1>
-          <p className="text-primary-foreground/80 text-lg">{dept.subtitle}</p>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-2">{dept.name}</h1>
+          <p className="text-primary-foreground/80 text-base sm:text-lg">{dept.subtitle}</p>
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="section-container max-w-4xl">
           <ScrollReveal>
-            <p className="text-muted-foreground leading-relaxed text-lg mb-10">{dept.description}</p>
+            <p className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">{dept.description}</p>
           </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-10 mb-12">
