@@ -206,7 +206,7 @@ html {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: hsl(var(--muted));
@@ -217,4 +217,19 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--primary) / 0.5);
+}
+
+/* Global input focus ring */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
+  border-color: hsl(var(--primary) / 0.6) !important;
+}
+
+/* Selection highlight */
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--foreground));
 }
