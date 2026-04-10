@@ -11,9 +11,9 @@ const topBarItems = [
 ];
 
 const navItems = [
-  { label: "Home", path: "/" },
+  { label: "Home", path: "/", disabled: false },
   {
-    label: "About", path: "/about",
+    label: "About", path: "/about", disabled: true,
     children: [
       { label: "Why Ishan Hospital?", path: "/about/why-ishan" },
       { label: "About Ishan Group", path: "/about/ishan-group" },
@@ -21,7 +21,7 @@ const navItems = [
     ],
   },
   {
-    label: "Departments", path: "/departments",
+    label: "Departments", path: "/departments", disabled: true,
     children: [
       { label: "Kayachikitsa (General Medicine)", path: "/departments/kayachikitsa" },
       { label: "Panchkarma OPD", path: "/departments/panchkarma-opd" },
@@ -35,7 +35,7 @@ const navItems = [
     ],
   },
   {
-    label: "Panchkarma", path: "/panchkarma",
+    label: "Panchkarma", path: "/panchkarma", disabled: true,
     children: [
       { label: "Overview", path: "/panchkarma" },
       { label: "Vamana", path: "/panchkarma/vamana" },
@@ -46,9 +46,9 @@ const navItems = [
       { label: "Other Therapies", path: "/panchkarma/other" },
     ],
   },
-  { label: "Our Doctors", path: "/doctors" },
-  { label: "Patient Services", path: "/patient-services" },
-  { label: "Contact", path: "/contact" },
+  { label: "Our Doctors", path: "/doctors", disabled: true },
+  { label: "Patient Services", path: "/patient-services", disabled: true },
+  { label: "Contact", path: "/contact", disabled: true },
 ];
 
 const Header = () => {
@@ -70,6 +70,8 @@ const Header = () => {
 
   return (
     <>
+      {/* Fixed header wrapper — keeps top bar + nav pinned while scrolling */}
+      <div className="fixed top-0 left-0 right-0 z-50">
       {/* Top bar */}
       <div className="bg-primary text-primary-foreground text-xs py-2 hidden md:block">
         <div className="section-container flex justify-between items-center">
@@ -82,71 +84,77 @@ const Header = () => {
             ))}
           </div>
           <div className="flex gap-4">
-            <Link to="/patient-portal" className="hover:underline">Patient Portal</Link>
-            <Link to="/careers" className="hover:underline">Careers</Link>
+            {/* Temporarily disabled */}
+            <span className="opacity-50 cursor-not-allowed select-none">Patient Portal</span>
+            <span className="opacity-50 cursor-not-allowed select-none">Careers</span>
           </div>
         </div>
       </div>
 
       {/* Main nav */}
       <header
-        className={`sticky top-0 z-50 relative transition-all duration-300 ${
+        className={`transition-all duration-300 ${
           scrolled ? "bg-card/95 backdrop-blur-lg shadow-soft" : "bg-card"
         }`}
       >
         <div className="section-container flex items-center justify-between h-16 lg:h-20">
           <Link to="/" className="flex items-center gap-2 sm:gap-3">
-            <img src={logo} alt="Ishan Ayurvedic Hospital" className="h-10 sm:h-12 lg:h-14 w-auto" />
-            <div className="hidden xs:block sm:block">
-              <div className="font-serif text-sm sm:text-lg font-bold text-foreground leading-tight">Ishan Ayurvedic</div>
-              <div className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">Hospital & Panchkarma Centre</div>
+            <img src={logo} alt="Ishan Ayurvedic Hospital" className="h-9 sm:h-12 lg:h-14 w-auto shrink-0" />
+            <div>
+              <div className="font-serif text-xs sm:text-base lg:text-lg font-bold text-foreground leading-tight">Ishan Ayurvedic</div>
+              <div className="text-[9px] sm:text-xs text-muted-foreground whitespace-nowrap">Hospital & Panchkarma Centre</div>
             </div>
           </Link>
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => (
-              <div
-                key={item.label}
-                className="relative group"
-                onMouseEnter={() => item.children && setActiveDropdown(item.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <Link
-                  to={item.path}
-                  className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                    location.pathname === item.path
-                      ? "text-primary bg-primary/5"
-                      : "text-foreground/80 hover:text-primary hover:bg-primary/5"
-                  }`}
+            {navItems.map((item) =>
+              item.disabled ? (
+                <div
+                  key={item.label}
+                  className="relative group"
+                  onMouseEnter={() => item.children && setActiveDropdown(item.label)}
+                  onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  {item.label}
-                  {item.children && <ChevronDown className="w-3.5 h-3.5" />}
-                </Link>
-
-                {item.children && activeDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-1 w-64 bg-card rounded-lg shadow-elevated border border-border p-2 animate-scale-in z-50">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.path}
-                        to={child.path}
-                        className="block px-3 py-2 text-sm rounded-md text-foreground/80 hover:text-primary hover:bg-primary/5 transition-colors"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                  {/* Non-clickable label — coming soon */}
+                  <span
+                    className="flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md text-foreground/40 cursor-not-allowed select-none"
+                    title="Coming soon"
+                  >
+                    {item.label}
+                    {item.children && <ChevronDown className="w-3.5 h-3.5" />}
+                  </span>
+                </div>
+              ) : (
+                <div
+                  key={item.label}
+                  className="relative group"
+                >
+                  <Link
+                    to={item.path}
+                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                      location.pathname === item.path
+                        ? "text-primary bg-primary/5"
+                        : "text-foreground/80 hover:text-primary hover:bg-primary/5"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              )
+            )}
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link to="/appointment">
-              <Button variant="hero" size="sm" className="hidden sm:inline-flex">
-                Book Appointment
-              </Button>
-            </Link>
+            {/* Book Appointment button — temporarily disabled */}
+            <button
+              type="button"
+              disabled
+              className="hidden sm:inline-flex items-center justify-center gap-1.5 bg-primary/40 text-primary-foreground/60 px-4 py-2 rounded-md text-sm font-medium cursor-not-allowed select-none"
+              title="Coming soon"
+            >
+              Book Appointment
+            </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="lg:hidden p-2 rounded-md hover:bg-muted transition-colors"
@@ -163,38 +171,40 @@ const Header = () => {
             <div className="section-container py-6 space-y-4">
               {navItems.map((item) => (
                 <div key={item.label} className="space-y-2">
-                  <Link
-                    to={item.path}
-                    className="block px-4 py-2 text-base font-semibold text-foreground hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                  {item.children && (
-                    <div className="pl-6 border-l-2 border-primary/10 space-y-1">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.path}
-                          to={child.path}
-                          className="block px-4 py-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
+                  {item.disabled ? (
+                    <span className="block px-4 py-2 text-base font-semibold text-foreground/35 cursor-not-allowed select-none">
+                      {item.label}
+                    </span>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className="block px-4 py-2 text-base font-semibold text-foreground hover:text-primary transition-colors"
+                    >
+                      {item.label}
+                    </Link>
                   )}
                 </div>
               ))}
               <div className="px-4 pt-4 pb-2">
-                <Link to="/appointment">
-                  <Button variant="hero" className="w-full py-6 text-base shadow-soft">
-                    Book Appointment
-                  </Button>
-                </Link>
+                <button
+                  disabled
+                  className="w-full py-4 text-base font-bold bg-primary/40 text-primary-foreground/60 rounded-lg cursor-not-allowed select-none"
+                  title="Coming soon"
+                >
+                  Book Appointment
+                </button>
               </div>
             </div>
           </div>
         )}
       </header>
+      </div>{/* end fixed header wrapper */}
+
+      {/* Spacer to offset fixed header height:
+          mobile  → nav only      = h-16 (64px)
+          md      → topbar+nav-16 = h-24 (96px)
+          lg      → topbar+nav-20 = h-28 (112px) */}
+      <div className="h-16 md:h-24 lg:h-28" aria-hidden="true" />
     </>
   );
 };

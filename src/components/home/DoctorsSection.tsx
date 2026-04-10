@@ -11,42 +11,42 @@ const doctors = [
     speciality: "Kayachikitsa (General Medicine)", 
     experience: "15+ years", 
     days: "Mon, Wed, Fri",
-    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=400"
+    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=400&h=400"
   },
   { 
     name: "Dr. Rajesh Kumar", 
     speciality: "Panchkarma Specialist", 
     experience: "12+ years", 
     days: "Mon–Sat",
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400"
+    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=400"
   },
   { 
     name: "Dr. Priya Verma", 
     speciality: "Prasuti Tantra (Gynaecology)", 
     experience: "10+ years", 
     days: "Tue, Thu, Sat",
-    image: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&q=80&w=400"
+    image: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&q=80&w=400&h=400"
   },
   { 
     name: "Dr. Suresh Yadav", 
     speciality: "Shalya Tantra (Surgery)", 
     experience: "18+ years", 
     days: "Mon, Wed, Fri",
-    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400"
+    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400&h=400"
   },
   { 
     name: "Dr. Meera Gupta", 
     speciality: "Shalakya (ENT & Eye)", 
     experience: "8+ years", 
     days: "Tue, Thu",
-    image: "https://images.unsplash.com/photo-1559839734-2b71f1e3c770?auto=format&fit=crop&q=80&w=400"
+    image: "https://images.unsplash.com/photo-1614608682850-e0d6ed316d47?auto=format&fit=crop&q=80&w=400&h=400"
   },
   { 
     name: "Dr. Vikram Singh", 
     speciality: "Kaumarabhritya (Paediatrics)", 
     experience: "11+ years", 
     days: "Mon–Fri",
-    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400"
+    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400&h=400"
   },
 ];
 
@@ -77,13 +77,16 @@ const DoctorsSection = () => {
           {doctors.map((doc, i) => (
             <ScrollReveal key={doc.name} delay={i * 100}>
               <div className="bg-card rounded-xl overflow-hidden shadow-soft hover:shadow-elevated transition-all duration-300 group hover:-translate-y-1 border border-border/50">
-                <div className="h-64 overflow-hidden relative">
+                <div className="h-64 overflow-hidden relative bg-muted">
                   <img 
                     src={doc.image} 
                     alt={doc.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&size=400&background=145428&color=fff&font-size=0.4`;
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
                 <div className="p-5">
                   <h3 className="font-serif text-lg font-semibold text-foreground">{doc.name}</h3>

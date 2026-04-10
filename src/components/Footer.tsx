@@ -2,30 +2,31 @@ import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Youtube, ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
 
+// disabled: true = temporarily hidden (will be re-enabled when pages are ready)
 const quickLinks = [
-  { label: "Home", path: "/" },
-  { label: "About", path: "/about/why-ishan" },
-  { label: "Our Doctors", path: "/doctors" },
-  { label: "Departments", path: "/departments" },
-  { label: "Panchkarma", path: "/panchkarma" },
-  { label: "Book Appointment", path: "/appointment" },
+  { label: "Home", path: "/", disabled: false },
+  { label: "About", path: "/about/why-ishan", disabled: true },
+  { label: "Our Doctors", path: "/doctors", disabled: true },
+  { label: "Departments", path: "/departments", disabled: true },
+  { label: "Panchkarma", path: "/panchkarma", disabled: true },
+  { label: "Book Appointment", path: "/appointment", disabled: true },
 ];
 
 const patientLinks = [
-  { label: "OPD Schedule", path: "/patient-services/opd-schedule" },
-  { label: "Patient FAQs", path: "/patient-services/faqs" },
-  { label: "Health Blog", path: "/patient-services/blog" },
-  { label: "Downloads", path: "/downloads" },
-  { label: "Patient Feedback", path: "/feedback" },
-  { label: "Patient Portal", path: "/patient-portal" },
+  { label: "OPD Schedule", path: "/patient-services/opd-schedule", disabled: true },
+  { label: "Patient FAQs", path: "/patient-services/faqs", disabled: true },
+  { label: "Health Blog", path: "/patient-services/blog", disabled: true },
+  { label: "Downloads", path: "/downloads", disabled: true },
+  { label: "Patient Feedback", path: "/feedback", disabled: true },
+  { label: "Patient Portal", path: "/patient-portal", disabled: true },
 ];
 
 const legalLinks = [
-  { label: "Privacy Policy", path: "/privacy-policy" },
-  { label: "Anti-Ragging", path: "/anti-ragging" },
-  { label: "Grievance Redressal", path: "/grievance" },
-  { label: "PoSH Policy", path: "/posh-policy" },
-  { label: "Disclosure & Licensing", path: "/disclosure" },
+  { label: "Privacy Policy", path: "/privacy-policy", disabled: true },
+  { label: "Anti-Ragging", path: "/anti-ragging", disabled: true },
+  { label: "Grievance Redressal", path: "/grievance", disabled: true },
+  { label: "PoSH Policy", path: "/posh-policy", disabled: true },
+  { label: "Disclosure & Licensing", path: "/disclosure", disabled: true },
 ];
 
 const Footer = () => {
@@ -40,14 +41,15 @@ const Footer = () => {
             Experience the Healing Power of Ayurveda
           </h3>
           <p className="text-sm sm:text-base text-foreground/80 mb-8 max-w-xl mx-auto px-4">
-            Book your consultation today and take the first step towards holistic wellness.
+            Fill out the enquiry form above and take the first step towards holistic wellness.
           </p>
-          <Link
-            to="/appointment"
-            className="inline-flex items-center justify-center gap-2 gradient-primary text-primary-foreground px-8 py-4 rounded-lg font-bold shadow-soft hover:opacity-90 transition-all hover:scale-105 w-full sm:w-auto overflow-hidden text-sm sm:text-base"
+          <button
+            disabled
+            title="Coming soon"
+            className="inline-flex items-center justify-center gap-2 gradient-primary/50 text-primary-foreground/60 px-8 py-4 rounded-lg font-bold shadow-soft cursor-not-allowed w-full sm:w-auto overflow-hidden text-sm sm:text-base"
           >
             Book Appointment Now
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -83,9 +85,11 @@ const Footer = () => {
           <ul className="grid grid-cols-2 sm:grid-cols-1 gap-2.5">
             {quickLinks.map((link) => (
               <li key={link.path}>
-                <Link to={link.path} className="text-sm text-primary-foreground/70 hover:text-accent transition-colors">
-                  {link.label}
-                </Link>
+                {link.disabled ? (
+                  <span className="text-sm text-primary-foreground/35 cursor-not-allowed select-none">{link.label}</span>
+                ) : (
+                  <Link to={link.path} className="text-sm text-primary-foreground/70 hover:text-accent transition-colors">{link.label}</Link>
+                )}
               </li>
             ))}
           </ul>
@@ -96,9 +100,11 @@ const Footer = () => {
           <ul className="grid grid-cols-2 sm:grid-cols-1 gap-2.5">
             {patientLinks.map((link) => (
               <li key={link.path}>
-                <Link to={link.path} className="text-sm text-primary-foreground/70 hover:text-accent transition-colors">
-                  {link.label}
-                </Link>
+                {link.disabled ? (
+                  <span className="text-sm text-primary-foreground/35 cursor-not-allowed select-none">{link.label}</span>
+                ) : (
+                  <Link to={link.path} className="text-sm text-primary-foreground/70 hover:text-accent transition-colors">{link.label}</Link>
+                )}
               </li>
             ))}
           </ul>
@@ -135,18 +141,18 @@ const Footer = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 order-1 md:order-2">
             {legalLinks.map((link) => (
-              <Link key={link.path} to={link.path} className="text-[10px] sm:text-xs text-primary-foreground/50 hover:text-accent transition-colors whitespace-nowrap">
+              <span key={link.path} className="text-[10px] sm:text-xs text-primary-foreground/30 cursor-not-allowed select-none whitespace-nowrap">
                 {link.label}
-              </Link>
+              </span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Scroll to top */}
+      {/* Scroll to top — anchored bottom-left so it never overlaps the FloatingCTA */}
       <button
         onClick={scrollToTop}
-        className="fixed bottom-24 right-6 w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-elevated flex items-center justify-center hover:scale-110 transition-transform z-40"
+        className="fixed bottom-6 left-6 w-10 h-10 rounded-full bg-primary text-primary-foreground shadow-elevated flex items-center justify-center hover:scale-110 transition-transform z-40"
         aria-label="Scroll to top"
       >
         <ArrowUp className="w-5 h-5" />
