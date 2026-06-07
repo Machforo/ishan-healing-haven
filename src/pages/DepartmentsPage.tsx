@@ -3,8 +3,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Leaf, Baby, Eye, Scissors, Dumbbell, FlaskConical, Pill, Heart } from "lucide-react";
+import { useAyurvedaData } from "@/hooks/useAyurvedaData";
 
-const departments = [
+const defaultDepartments = [
   { icon: Heart, name: "Kayachikitsa", subtitle: "General Medicine", path: "/departments/kayachikitsa", desc: "Diabetes, arthritis, digestive & neurological disorders." },
   { icon: Leaf, name: "Panchkarma OPD", subtitle: "Purification Therapy", path: "/departments/panchkarma-opd", desc: "Patient assessment, treatment planning & follow-up." },
   { icon: Heart, name: "Prasuti Tantra", subtitle: "Gynaecology & Maternity", path: "/departments/prasuti", desc: "PCOS, antenatal care, menstrual disorders." },
@@ -17,6 +18,9 @@ const departments = [
 ];
 
 const DepartmentsPage = () => {
+  const { data } = useAyurvedaData("academics");
+  const departmentsData = data?.departments?.length > 0 ? data.departments : defaultDepartments;
+
   return (
     <Layout>
       <section className="gradient-primary py-12 sm:py-20">
@@ -31,21 +35,23 @@ const DepartmentsPage = () => {
       <section className="py-12 sm:py-20">
         <div className="section-container">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {departments.map((dept, i) => (
+            {departmentsData.map((dept: any, i: number) => {
+              const Icon = dept.icon && typeof dept.icon !== 'string' ? dept.icon : defaultDepartments[i % defaultDepartments.length].icon;
+              return (
               <ScrollReveal key={dept.name} delay={i * 80}>
-                <Link to={dept.path} className="group block bg-card rounded-xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 h-full">
+                <Link to={dept.path || `/departments/${dept.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="group block bg-card rounded-xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 h-full">
                   <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <dept.icon className="w-6 h-6 text-primary-foreground" />
+                    <Icon className="w-6 h-6 text-primary-foreground" />
                   </div>
                   <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{dept.name}</h3>
                   <p className="text-sm text-primary font-medium mb-2">{dept.subtitle}</p>
-                  <p className="text-sm text-muted-foreground mb-4">{dept.desc}</p>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{dept.desc || dept.description}</p>
                   <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
                     View Details <ArrowRight className="w-4 h-4" />
                   </span>
                 </Link>
               </ScrollReveal>
-            ))}
+            )})}
           </div>
         </div>
       </section>

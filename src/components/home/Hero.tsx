@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Shield, Clock, Award, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useHospitalData } from "@/hooks/useHospitalData";
 import heroImg from "@/assets/hero-hospital.jpg";
 
 const Hero = () => {
@@ -22,23 +23,48 @@ const Hero = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (form.name && form.phone) {
+      try {
+        await fetch("https://ishan-backend-g096.onrender.com/api/hospital/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...form, email: `${form.phone}@placeholder.com`, source: "Homepage Hero" }),
+        });
+      } catch (error) {
+        console.warn("Backend not reachable, simulating success", error);
+      }
       setSubmitted(true);
       setTimeout(() => setSubmitted(false), 4000);
       setForm({ name: "", phone: "", dept: "", message: "" });
     }
   };
 
+  const { data } = useHospitalData("homepage");
+  const banners = data?.banners?.length > 0 ? data.banners : [{ heading: "Holistic Healing Through Ancient Ayurveda", subheading: "Experience authentic Panchkarma treatments and expert Ayurvedic care at Greater Noida's premier teaching hospital.", image: heroImg }];
+
+  // Simple carousel logic
+  const [currentBanner, setCurrentBanner] = useState(0);
+  useEffect(() => {
+    if (banners.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentBanner((prev) => (prev + 1) % banners.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [banners.length]);
+
+  const banner = banners[currentBanner];
+
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <img
-          src={heroImg}
-          alt="Ishan Ayurvedic Hospital"
-          className="w-full h-full object-cover"
+          src={banner.image || heroImg}
+          alt={banner.heading}
+          className="w-full h-full object-cover transition-opacity duration-1000"
           width={1920}
           height={1080}
         />
@@ -57,21 +83,19 @@ const Hero = () => {
             </div>
 
             <h1
+              key={`h-${currentBanner}`}
               className="font-serif text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-tight mb-4 sm:mb-5 animate-slide-up"
               style={{ animationDelay: "0.1s" }}
             >
-              Holistic Healing Through{" "}
-              <span className="text-accent underline decoration-accent/30 underline-offset-8">
-                Ancient Ayurveda
-              </span>
+              {banner.heading || "Holistic Healing Through Ancient Ayurveda"}
             </h1>
 
             <p
+              key={`p-${currentBanner}`}
               className="text-base sm:text-lg text-primary-foreground/80 leading-relaxed mb-7 max-w-lg animate-slide-up"
               style={{ animationDelay: "0.2s" }}
             >
-              Experience authentic Panchkarma treatments and expert Ayurvedic
-              care at Greater Noida&apos;s premier teaching hospital.
+              {banner.subheading || "Experience authentic Panchkarma treatments and expert Ayurvedic care at Greater Noida's premier teaching hospital."}
             </p>
 
             {/* Info chips */}

@@ -6,6 +6,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Suspense } from "react";
 import Index from "./pages/Index";
 import { ConsultationModal, useTimedConsultationPopup } from "./components/ConsultationModal";
+import WhyIshan from "./pages/WhyIshan";
+import Doctors from "./pages/Doctors";
+import Appointment from "./pages/Appointment";
+import Contact from "./pages/Contact";
+import DepartmentsPage from "./pages/DepartmentsPage";
+import DepartmentDetail from "./pages/DepartmentDetail";
+import PanchkarmaDetail from "./pages/PanchkarmaDetail";
+import PatientServices from "./pages/PatientServices";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -32,16 +41,16 @@ const App = () => {
 
               {/* ── TEMPORARILY HIDDEN — redirect all other routes to home ── */}
               {/* To restore a page: replace its <Navigate> with the real element */}
-              <Route path="/about/*" element={<Navigate to="/" replace />} />
-              <Route path="/doctors" element={<Navigate to="/" replace />} />
-              <Route path="/appointment" element={<Navigate to="/" replace />} />
-              <Route path="/contact" element={<Navigate to="/" replace />} />
-              <Route path="/departments" element={<Navigate to="/" replace />} />
-              <Route path="/departments/:slug" element={<Navigate to="/" replace />} />
-              <Route path="/panchkarma" element={<Navigate to="/" replace />} />
-              <Route path="/panchkarma/:slug" element={<Navigate to="/" replace />} />
-              <Route path="/patient-services" element={<Navigate to="/" replace />} />
-              <Route path="/patient-services/*" element={<Navigate to="/" replace />} />
+              <Route path="/about/*" element={<WhyIshan />} />
+              <Route path="/doctors" element={<Doctors />} />
+              <Route path="/appointment" element={<Appointment />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/departments" element={<DepartmentsPage />} />
+              <Route path="/departments/:slug" element={<DepartmentDetail />} />
+              <Route path="/panchkarma" element={<PanchkarmaDetail />} />
+              <Route path="/panchkarma/:slug" element={<PanchkarmaDetail />} />
+              <Route path="/patient-services" element={<PatientServices />} />
+              <Route path="/patient-services/*" element={<PatientServices />} />
               <Route path="/patient-portal" element={<Navigate to="/" replace />} />
               <Route path="/careers" element={<Navigate to="/" replace />} />
               <Route path="/feedback" element={<Navigate to="/" replace />} />
@@ -51,7 +60,7 @@ const App = () => {
               <Route path="/anti-ragging" element={<Navigate to="/" replace />} />
               <Route path="/grievance" element={<Navigate to="/" replace />} />
               <Route path="/posh-policy" element={<Navigate to="/" replace />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

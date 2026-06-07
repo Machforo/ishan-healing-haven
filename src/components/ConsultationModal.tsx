@@ -22,18 +22,39 @@ interface ConsultationModalProps {
 export function ConsultationModal({ open, onOpenChange, doctorName }: ConsultationModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success("Consultation Request Sent!", {
-        description: "Our healthcare coordinator will call you shortly to confirm your slot.",
+
+    const target = e.currentTarget;
+    const nameInput = target.querySelector('#name') as HTMLInputElement;
+    const phoneInput = target.querySelector('#phone') as HTMLInputElement;
+    const messageInput = target.querySelector('#message') as HTMLTextAreaElement;
+
+    const data = {
+      name: nameInput?.value || "",
+      phone: phoneInput?.value || "",
+      email: `${phoneInput?.value || "unknown"}@placeholder.com`,
+      message: messageInput?.value || "",
+      course: doctorName || "General Consultation",
+      source: "Consultation Modal"
+    };
+
+    try {
+      await fetch("https://ishan-backend-g096.onrender.com/api/hospital/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
-      if (onOpenChange) onOpenChange(false);
-    }, 1500);
+    } catch (err) {
+      console.warn("Error submitting lead:", err);
+    }
+    
+    setIsSubmitting(false);
+    toast.success("Consultation Request Sent!", {
+      description: "Our healthcare coordinator will call you shortly to confirm your slot.",
+    });
+    if (onOpenChange) onOpenChange(false);
   };
 
   return (

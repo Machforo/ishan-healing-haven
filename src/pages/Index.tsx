@@ -6,16 +6,22 @@ import PanchkarmaHighlight from "@/components/home/PanchkarmaHighlight";
 import DoctorsSection from "@/components/home/DoctorsSection";
 import Testimonials from "@/components/home/Testimonials";
 import Accreditations from "@/components/home/Accreditations";
+import InstitutionalProfile from "@/components/home/InstitutionalProfile";
+import WhyChooseUs from "@/components/home/WhyChooseUs";
+import LifeAtIshan from "@/components/home/LifeAtIshan";
 
 const Index = () => {
   return (
     <Layout>
       <Hero />
       <StatsBar />
+      <InstitutionalProfile />
+      <WhyChooseUs />
       <Departments />
       <PanchkarmaHighlight />
       <DoctorsSection />
       <Testimonials />
+      <LifeAtIshan />
       <Accreditations />
     </Layout>
   );

@@ -5,28 +5,28 @@ import logo from "@/assets/logo.png";
 // disabled: true = temporarily hidden (will be re-enabled when pages are ready)
 const quickLinks = [
   { label: "Home", path: "/", disabled: false },
-  { label: "About", path: "/about/why-ishan", disabled: true },
-  { label: "Our Doctors", path: "/doctors", disabled: true },
-  { label: "Departments", path: "/departments", disabled: true },
-  { label: "Panchkarma", path: "/panchkarma", disabled: true },
-  { label: "Book Appointment", path: "/appointment", disabled: true },
+  { label: "About", path: "/about/why-ishan", disabled: false },
+  { label: "Our Doctors", path: "/doctors", disabled: false },
+  { label: "Departments", path: "/departments", disabled: false },
+  { label: "Panchkarma", path: "/panchkarma", disabled: false },
+  { label: "Book Appointment", path: "/appointment", disabled: false },
 ];
 
 const patientLinks = [
-  { label: "OPD Schedule", path: "/patient-services/opd-schedule", disabled: true },
-  { label: "Patient FAQs", path: "/patient-services/faqs", disabled: true },
-  { label: "Health Blog", path: "/patient-services/blog", disabled: true },
-  { label: "Downloads", path: "/downloads", disabled: true },
-  { label: "Patient Feedback", path: "/feedback", disabled: true },
-  { label: "Patient Portal", path: "/patient-portal", disabled: true },
+  { label: "OPD Schedule", path: "/patient-services/opd-schedule", disabled: false },
+  { label: "Patient FAQs", path: "/patient-services/faqs", disabled: false },
+  { label: "Health Blog", path: "/patient-services/blog", disabled: false },
+  { label: "Downloads", path: "/downloads", disabled: false },
+  { label: "Patient Feedback", path: "/feedback", disabled: false },
+  { label: "Patient Portal", path: "/patient-portal", disabled: false },
 ];
 
 const legalLinks = [
-  { label: "Privacy Policy", path: "/privacy-policy", disabled: true },
-  { label: "Anti-Ragging", path: "/anti-ragging", disabled: true },
-  { label: "Grievance Redressal", path: "/grievance", disabled: true },
-  { label: "PoSH Policy", path: "/posh-policy", disabled: true },
-  { label: "Disclosure & Licensing", path: "/disclosure", disabled: true },
+  { label: "Privacy Policy", path: "/privacy-policy", disabled: false },
+  { label: "Anti-Ragging", path: "/anti-ragging", disabled: false },
+  { label: "Grievance Redressal", path: "/grievance", disabled: false },
+  { label: "PoSH Policy", path: "/posh-policy", disabled: false },
+  { label: "Disclosure & Licensing", path: "/disclosure", disabled: false },
 ];
 
 const Footer = () => {

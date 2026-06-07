@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import panchkarmaImg from "@/assets/panchkarma-room.jpg";
+import { useAyurvedaData } from "@/hooks/useAyurvedaData";
 
 const benefits = [
   "Ancient purification therapies for modern ailments",
@@ -13,6 +14,11 @@ const benefits = [
 ];
 
 const PanchkarmaHighlight = () => {
+  const { data } = useAyurvedaData("hospital");
+  const panchkarmaData = data?.panchkarma?.length > 0 ? data.panchkarma : null;
+  const displayBenefits = panchkarmaData ? panchkarmaData.map((p: any) => p.title || p.description) : benefits;
+  const image = panchkarmaData && panchkarmaData[0]?.image ? panchkarmaData[0].image : panchkarmaImg;
+
   return (
     <section className="py-12 sm:py-20">
       <div className="section-container">
@@ -20,7 +26,7 @@ const PanchkarmaHighlight = () => {
           <ScrollReveal>
             <div className="relative">
               <img
-                src={panchkarmaImg}
+                src={image}
                 alt="Panchkarma Therapy Centre"
                 className="rounded-2xl shadow-elevated w-full object-cover aspect-[4/3]"
                 loading="lazy"
@@ -28,7 +34,7 @@ const PanchkarmaHighlight = () => {
                 height={720}
               />
               <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 gradient-gold rounded-xl px-4 sm:px-6 py-3 sm:py-4 shadow-gold">
-                <div className="font-serif text-xl sm:text-2xl font-bold text-foreground">7+</div>
+                <div className="font-serif text-xl sm:text-2xl font-bold text-foreground">{displayBenefits.length}+</div>
                 <div className="text-xs sm:text-sm text-foreground/80">Panchkarma Therapies</div>
               </div>
             </div>
@@ -44,7 +50,7 @@ const PanchkarmaHighlight = () => {
                 Our Panchkarma Centre offers the five classical purification therapies — Vamana, Virechana, Basti, Nasya, and Raktamokshana — administered by certified Ayurvedic physicians in a serene, healing environment.
               </p>
               <ul className="space-y-3 mb-8">
-                {benefits.map((b, i) => (
+                {displayBenefits.slice(0, 5).map((b: string, i: number) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-sm text-foreground/80">{b}</span>

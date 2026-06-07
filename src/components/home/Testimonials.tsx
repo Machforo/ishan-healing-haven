@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
-const testimonials = [
+import { useHospitalData } from "@/hooks/useHospitalData";
+
+const defaultTestimonials = [
   {
     name: "Rajiv Mehta",
     treatment: "Panchkarma Therapy",
@@ -51,6 +53,9 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const { data } = useHospitalData("testimonials");
+  const testimonials = data?.length > 0 ? data : (data?.data?.length > 0 ? data.data : defaultTestimonials);
+
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
 
@@ -107,30 +112,30 @@ const Testimonials = () => {
 
             {/* Stars */}
             <div className="flex gap-1 mb-5">
-              {Array.from({ length: t.rating }).map((_, j) => (
+              {Array.from({ length: t.rating || 5 }).map((_, j) => (
                 <Star key={j} className="w-5 h-5 fill-accent text-accent" />
               ))}
             </div>
 
             {/* Quote text */}
             <p className="text-foreground/80 text-base sm:text-lg leading-relaxed italic mb-8">
-              &ldquo;{t.quote}&rdquo;
+              &ldquo;{t.quote || t.feedback}&rdquo;
             </p>
 
             {/* Author row */}
             <div className="flex items-center gap-4">
               <img
-                src={t.avatar}
+                src={t.avatar || t.image}
                 alt={t.name}
                 className="w-14 h-14 rounded-full object-cover object-top border-2 border-primary/20 shrink-0"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&size=120&background=145428&color=fff`;
+                  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name || "User")}&size=120&background=145428&color=fff`;
                 }}
               />
               <div>
                 <div className="font-semibold text-foreground text-base">{t.name}</div>
-                <div className="text-xs text-primary font-medium mt-0.5">{t.treatment}</div>
-                <div className="text-xs text-muted-foreground mt-0.5">{t.location}</div>
+                <div className="text-xs text-primary font-medium mt-0.5">{t.treatment || t.designation}</div>
+                {t.location && <div className="text-xs text-muted-foreground mt-0.5">{t.location}</div>}
               </div>
             </div>
           </div>
@@ -184,11 +189,11 @@ const Testimonials = () => {
                 }`}
               >
                 <img
-                  src={person.avatar}
+                  src={person.avatar || person.image}
                   alt={person.name}
                   className="w-10 h-10 rounded-full object-cover object-top"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(person.name)}&size=80&background=145428&color=fff`;
+                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(person.name || "User")}&size=80&background=145428&color=fff`;
                   }}
                 />
               </button>

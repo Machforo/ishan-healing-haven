@@ -2,7 +2,9 @@ import { useState } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { ArrowRight, Leaf, Baby, Eye, Scissors, Dumbbell, FlaskConical, Pill, Heart, Search, X } from "lucide-react";
 
-const departments = [
+import { useHospitalData } from "@/hooks/useHospitalData";
+
+const defaultDepartments = [
   { icon: Heart,       name: "Kayachikitsa",  subtitle: "General Medicine",         path: "/departments/kayachikitsa",   color: "from-emerald-500 to-emerald-700", category: "Medicine" },
   { icon: Leaf,        name: "Panchkarma",    subtitle: "Purification Therapy",      path: "/departments/panchkarma-opd", color: "from-amber-500 to-amber-700",    category: "Therapy" },
   { icon: Heart,       name: "Prasuti Tantra",subtitle: "Gynaecology & Maternity",  path: "/departments/prasuti",        color: "from-pink-500 to-pink-700",      category: "Medicine" },
@@ -17,14 +19,18 @@ const departments = [
 const categories = ["All", "Medicine", "Therapy", "Surgery", "Diagnostics"];
 
 const Departments = () => {
+  const { data } = useHospitalData("departments");
+  const departmentsData = data?.length > 0 ? data : (data?.data?.length > 0 ? data.data : defaultDepartments);
+
   const [activeFilter, setActiveFilter] = useState("All");
   const [query, setQuery] = useState("");
 
-  const filtered = departments.filter(d => {
-    const matchCat = activeFilter === "All" || d.category === activeFilter;
+  const filtered = departmentsData.filter((d: any) => {
+    const matchCat = activeFilter === "All" || d.category === activeFilter || !d.category;
     const matchQ   = query.trim() === "" ||
-      d.name.toLowerCase().includes(query.toLowerCase()) ||
-      d.subtitle.toLowerCase().includes(query.toLowerCase());
+      (d.name && d.name.toLowerCase().includes(query.toLowerCase())) ||
+      (d.subtitle && d.subtitle.toLowerCase().includes(query.toLowerCase())) ||
+      (d.description && d.description.toLowerCase().includes(query.toLowerCase()));
     return matchCat && matchQ;
   });
 
@@ -95,15 +101,15 @@ const Departments = () => {
                   className="group block bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 cursor-default"
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${dept.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-soft`}>
-                      <dept.icon className="w-6 h-6 text-white" />
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${dept.color || 'from-emerald-500 to-emerald-700'} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-soft`}>
+                      {dept.icon && typeof dept.icon !== 'string' ? <dept.icon className="w-6 h-6 text-white" /> : <Leaf className="w-6 h-6 text-white" />}
                     </div>
                     <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">
-                      {dept.category}
+                      {dept.category || 'Medicine'}
                     </span>
                   </div>
                   <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{dept.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 leading-snug">{dept.subtitle}</p>
+                  <p className="text-sm text-muted-foreground mb-4 leading-snug">{dept.subtitle || dept.description}</p>
                   <span className="inline-flex items-center gap-1 text-sm font-medium text-primary/50 select-none">
                     Coming soon <ArrowRight className="w-4 h-4" />
                   </span>

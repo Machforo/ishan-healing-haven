@@ -3,8 +3,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Calendar, Search, X, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConsultationModal } from "@/components/ConsultationModal";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
-const doctors = [
+const defaultDoctors = [
   { 
     name: "Dr. Anita Sharma", 
     speciality: "Kayachikitsa (General Medicine)", 
@@ -60,17 +61,22 @@ const categories = ["All", "Medicine", "Therapy", "Surgery"];
 const availabilityDays = ["All Days", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const DoctorsSection = () => {
+  const { data } = useHospitalData("doctors");
+  const doctors = data?.length > 0 ? data : (data?.data?.length > 0 ? data.data : defaultDoctors);
+
   const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeDay, setActiveDay] = useState("All Days");
   const [query, setQuery] = useState("");
 
-  const filtered = doctors.filter(d => {
-    const matchCat  = activeCategory === "All" || d.category === activeCategory;
-    const matchDay  = activeDay === "All Days" || d.days.includes(activeDay);
+  const filtered = doctors.filter((d: any) => {
+    const matchCat  = activeCategory === "All" || d.category === activeCategory || d.department === activeCategory;
+    const matchDay  = activeDay === "All Days" || (d.days && d.days.includes(activeDay)) || !d.days;
     const matchQ    = query.trim() === "" ||
-      d.name.toLowerCase().includes(query.toLowerCase()) ||
-      d.speciality.toLowerCase().includes(query.toLowerCase());
+      (d.name && d.name.toLowerCase().includes(query.toLowerCase())) ||
+      (d.speciality && d.speciality.toLowerCase().includes(query.toLowerCase())) ||
+      (d.department && d.department.toLowerCase().includes(query.toLowerCase())) ||
+      (d.designation && d.designation.toLowerCase().includes(query.toLowerCase()));
     return matchCat && matchDay && matchQ;
   });
 
@@ -178,17 +184,17 @@ const DoctorsSection = () => {
                   {/* Photo */}
                   <div className="h-64 overflow-hidden relative bg-muted">
                     <img 
-                      src={doc.image} 
+                      src={doc.image || doc.avatar} 
                       alt={doc.name}
                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&size=400&background=145428&color=fff&font-size=0.4`;
+                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name || "Doctor")}&size=400&background=145428&color=fff&font-size=0.4`;
                       }}
                     />
                     {/* Category badge overlay */}
                     <div className="absolute top-3 left-3">
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary/90 text-primary-foreground shadow-sm backdrop-blur-sm">
-                        {doc.category}
+                        {doc.category || doc.department || "Consultant"}
                       </span>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -197,11 +203,11 @@ const DoctorsSection = () => {
                   {/* Info */}
                   <div className="p-5">
                     <h3 className="font-serif text-lg font-semibold text-foreground">{doc.name}</h3>
-                    <p className="text-sm text-primary font-medium mt-0.5">{doc.speciality}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{doc.experience} experience</p>
+                    <p className="text-sm text-primary font-medium mt-0.5">{doc.speciality || doc.designation}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{doc.experience ? `${doc.experience} experience` : doc.qualifications}</p>
                     <div className="flex items-center gap-1.5 mt-3 text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2">
                       <Calendar className="w-3.5 h-3.5 text-accent shrink-0" />
-                      OPD: <span className="font-medium text-foreground/80">{doc.days}</span>
+                      OPD: <span className="font-medium text-foreground/80">{doc.days || "Mon-Sat"}</span>
                     </div>
                     <Button 
                       variant="outline-primary" 

@@ -14,7 +14,7 @@ const topBarItems = [
 const navItems = [
   { label: "Home", path: "/", disabled: false },
   {
-    label: "About", path: "/about", disabled: true,
+    label: "About", path: "/about", disabled: false,
     children: [
       { label: "Why Ishan Hospital?", path: "/about/why-ishan" },
       { label: "About Ishan Group", path: "/about/ishan-group" },
@@ -22,7 +22,7 @@ const navItems = [
     ],
   },
   {
-    label: "Departments", path: "/departments", disabled: true,
+    label: "Departments", path: "/departments", disabled: false,
     children: [
       { label: "Kayachikitsa (General Medicine)", path: "/departments/kayachikitsa" },
       { label: "Panchkarma OPD", path: "/departments/panchkarma-opd" },
@@ -36,7 +36,7 @@ const navItems = [
     ],
   },
   {
-    label: "Panchkarma", path: "/panchkarma", disabled: true,
+    label: "Panchkarma", path: "/panchkarma", disabled: false,
     children: [
       { label: "Overview", path: "/panchkarma" },
       { label: "Vamana", path: "/panchkarma/vamana" },
@@ -47,9 +47,9 @@ const navItems = [
       { label: "Other Therapies", path: "/panchkarma/other" },
     ],
   },
-  { label: "Doctors", path: "/doctors", disabled: true },
-  { label: "Services", path: "/patient-services", disabled: true },
-  { label: "Contact", path: "/contact", disabled: true },
+  { label: "Doctors", path: "/doctors", disabled: false },
+  { label: "Services", path: "/patient-services", disabled: false },
+  { label: "Contact", path: "/contact", disabled: false },
 ];
 
 const Header = () => {
