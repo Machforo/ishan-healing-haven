@@ -1,5 +1,5 @@
 import ScrollReveal from "@/components/ScrollReveal";
-import { useAyurvedaData } from "@/hooks/useAyurvedaData";
+import { useHospitalData } from "@/hooks/useHospitalData";
 import { Award, Heart, Users, Leaf, CheckCircle } from "lucide-react";
 
 const defaultReasons = [
@@ -10,7 +10,7 @@ const defaultReasons = [
 ];
 
 const WhyChooseUs = () => {
-  const { data } = useAyurvedaData("homepage");
+  const { data } = useHospitalData("homepage");
   const reasons = data?.whyChooseUs?.length > 0 ? data.whyChooseUs : defaultReasons;
 
   return (

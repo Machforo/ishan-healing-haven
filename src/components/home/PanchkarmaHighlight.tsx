@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import panchkarmaImg from "@/assets/panchkarma-room.jpg";
-import { useAyurvedaData } from "@/hooks/useAyurvedaData";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 const benefits = [
   "Ancient purification therapies for modern ailments",
@@ -14,7 +14,7 @@ const benefits = [
 ];
 
 const PanchkarmaHighlight = () => {
-  const { data } = useAyurvedaData("hospital");
+  const { data } = useHospitalData("hospital");
   const panchkarmaData = data?.panchkarma?.length > 0 ? data.panchkarma : null;
   const displayBenefits = panchkarmaData ? panchkarmaData.map((p: any) => p.title || p.description) : benefits;
   const image = panchkarmaData && panchkarmaData[0]?.image ? panchkarmaData[0].image : panchkarmaImg;

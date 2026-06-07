@@ -49,7 +49,7 @@ export function ConsultationModal({ open, onOpenChange, doctorName }: Consultati
     } catch (err) {
       console.warn("Error submitting lead:", err);
     }
-    
+
     setIsSubmitting(false);
     toast.success("Consultation Request Sent!", {
       description: "Our healthcare coordinator will call you shortly to confirm your slot.",
@@ -63,8 +63,8 @@ export function ConsultationModal({ open, onOpenChange, doctorName }: Consultati
         <DialogHeader>
           <DialogTitle className="font-serif text-2xl text-primary">Book a Consultation</DialogTitle>
           <DialogDescription>
-            {doctorName 
-              ? `Fill in the details to request an appointment with ${doctorName}.` 
+            {doctorName
+              ? `Fill in the details to request an appointment with ${doctorName}.`
               : "Experience authentic Ayurvedic healing. Leave your details and we'll get back to you."}
           </DialogDescription>
         </DialogHeader>
@@ -85,9 +85,9 @@ export function ConsultationModal({ open, onOpenChange, doctorName }: Consultati
             <Label htmlFor="message" className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-muted-foreground" /> Health Concern (Optional)
             </Label>
-            <Textarea 
-              id="message" 
-              placeholder="Briefly describe your health concern..." 
+            <Textarea
+              id="message"
+              placeholder="Briefly describe your health concern..."
               className="resize-none h-24"
             />
           </div>

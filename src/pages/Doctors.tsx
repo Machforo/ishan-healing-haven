@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { ConsultationModal } from "@/components/ConsultationModal";
-import { useAyurvedaData } from "@/hooks/useAyurvedaData";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 const defaultDoctors = [
   { 
@@ -83,7 +83,7 @@ const defaultDoctors = [
 ];
 
 const Doctors = () => {
-  const { data } = useAyurvedaData("faculty");
+  const { data } = useHospitalData("faculty");
   const allDoctors = data?.length > 0 ? data : (data?.data?.length > 0 ? data.data : defaultDoctors);
 
   const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);

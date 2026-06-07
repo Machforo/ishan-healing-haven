@@ -26,15 +26,15 @@ const Appointment = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     const target = e.currentTarget;
     const inputs = target.querySelectorAll('input');
     const nameInput = inputs[0] as HTMLInputElement;
     const phoneInput = inputs[1] as HTMLInputElement;
     const emailInput = inputs[2] as HTMLInputElement;
-    
+
     const textarea = target.querySelector('textarea') as HTMLTextAreaElement;
-    
+
     // Attempt to get the selected value from the Radix Select using aria attributes or standard DOM ways
     // The Radix UI Select doesn't use a native select internally that is easy to query.
     // To keep it simple, we will just use a generic course name, or try to find the hidden input if it exists.

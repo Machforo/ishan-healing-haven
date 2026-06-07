@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CheckCircle, Award, Users, Heart, Leaf } from "lucide-react";
-import { useAyurvedaData } from "@/hooks/useAyurvedaData";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 const defaultReasons = [
   { icon: Award, title: "NCISM Approved", desc: "Recognised teaching hospital under the National Commission for Indian System of Medicine." },
@@ -13,8 +13,8 @@ const defaultReasons = [
 ];
 
 const WhyIshan = () => {
-  const { data: homeData } = useAyurvedaData("homepage");
-  const { data: aboutData } = useAyurvedaData("aboutus");
+  const { data: homeData } = useHospitalData("homepage");
+  const { data: aboutData } = useHospitalData("aboutus");
 
   const reasons = homeData?.whyChooseUs?.length > 0 ? homeData.whyChooseUs : defaultReasons;
   const missionDesc = aboutData?.missionVision?.mission || aboutData?.ourStory?.description || 

@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Leaf, Baby, Eye, Scissors, Dumbbell, FlaskConical, Pill, Heart } from "lucide-react";
-import { useAyurvedaData } from "@/hooks/useAyurvedaData";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 const defaultDepartments = [
   { icon: Heart, name: "Kayachikitsa", subtitle: "General Medicine", path: "/departments/kayachikitsa", desc: "Diabetes, arthritis, digestive & neurological disorders." },
@@ -18,7 +18,7 @@ const defaultDepartments = [
 ];
 
 const DepartmentsPage = () => {
-  const { data } = useAyurvedaData("academics");
+  const { data } = useHospitalData("academics");
   const departmentsData = data?.departments?.length > 0 ? data.departments : defaultDepartments;
 
   return (

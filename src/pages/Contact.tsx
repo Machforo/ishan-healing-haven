@@ -15,7 +15,38 @@ const contactInfo = [
   { icon: MessageCircle, label: "WhatsApp", value: "+91-XXXXX-XXXXX" },
 ];
 
+import { useState } from "react";
+import { toast } from "sonner";
+
 const Contact = () => {
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "", subject: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone) return;
+    setIsSubmitting(true);
+    try {
+      await fetch("https://ishan-backend-g096.onrender.com/api/hospital/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email || `${formData.phone}@placeholder.com`,
+          message: `Subject: ${formData.subject}. ${formData.message}`,
+          source: "Contact Page"
+        }),
+      });
+      toast.success("Message sent! We'll get back to you shortly.");
+      setFormData({ name: "", phone: "", email: "", subject: "", message: "" });
+    } catch (err) {
+      toast.error("Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Layout>
       <section className="gradient-primary py-12 sm:py-20">
@@ -61,15 +92,17 @@ const Contact = () => {
             <ScrollReveal delay={200}>
               <div className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated border border-border/50">
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input placeholder="Your Name" />
-                    <Input type="tel" placeholder="Phone Number" />
+                    <Input placeholder="Your Name" required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                    <Input type="tel" placeholder="Phone Number" required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
                   </div>
-                  <Input type="email" placeholder="Email Address" />
-                  <Input placeholder="Subject" />
-                  <Textarea placeholder="Your Message..." rows={4} />
-                  <Button variant="hero" className="w-full" size="lg">Send Message</Button>
+                  <Input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
+                  <Input placeholder="Subject" value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})} />
+                  <Textarea placeholder="Your Message..." rows={4} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} />
+                  <Button variant="hero" className="w-full" size="lg" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </Button>
                 </form>
               </div>
             </ScrollReveal>
