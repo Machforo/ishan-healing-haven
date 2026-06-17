@@ -6,28 +6,36 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const contactInfo = [
-  { icon: MapPin, label: "Address", value: "Ishan Campus, Abhimanyu Crossing, Greater Noida, Gautam Buddh Nagar, UP – 201310" },
-  { icon: Phone, label: "Reception", value: "+91-XXXXX-XXXXX" },
-  { icon: Phone, label: "Emergency", value: "+91-XXXXX-XXXXX" },
-  { icon: Mail, label: "Email", value: "hospital@ishan.ac" },
-  { icon: Clock, label: "OPD Timing", value: "Monday – Saturday, 9:00 AM – 4:00 PM" },
-  { icon: MessageCircle, label: "WhatsApp", value: "+91-XXXXX-XXXXX" },
-];
-
 import { useState } from "react";
 import { toast } from "sonner";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 const Contact = () => {
+  const { data } = useHospitalData("homepage");
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const address = data?.contactAddress || "Ishan Campus, Abhimanyu Crossing, Greater Noida, Gautam Buddh Nagar, UP – 201310";
+  const phone = data?.contactPhone || "+91-9582761166";
+  const email = data?.contactEmail || "hospital@ishan.ac";
+  const opdTimings = data?.opdHours || "Monday – Saturday, 9:00 AM – 4:00 PM";
+
+  const contactInfo = [
+    { icon: MapPin, label: "Address", value: address },
+    { icon: Phone, label: "Reception", value: phone },
+    { icon: Phone, label: "Emergency", value: phone },
+    { icon: Mail, label: "Email", value: email },
+    { icon: Clock, label: "OPD Timing", value: opdTimings },
+    { icon: MessageCircle, label: "WhatsApp", value: phone },
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.phone) return;
     setIsSubmitting(true);
     try {
-      await fetch("https://ishan-backend-g096.onrender.com/api/hospital/leads", {
+      const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const response = await fetch(`${apiBase}/hospital/leads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -38,6 +46,9 @@ const Contact = () => {
           source: "Contact Page"
         }),
       });
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
       toast.success("Message sent! We'll get back to you shortly.");
       setFormData({ name: "", phone: "", email: "", subject: "", message: "" });
     } catch (err) {
@@ -94,12 +105,12 @@ const Contact = () => {
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input placeholder="Your Name" required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
-                    <Input type="tel" placeholder="Phone Number" required value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+                    <Input placeholder="Your Name" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                    <Input type="tel" placeholder="Phone Number" required value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
                   </div>
-                  <Input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-                  <Input placeholder="Subject" value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})} />
-                  <Textarea placeholder="Your Message..." rows={4} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} />
+                  <Input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                  <Input placeholder="Subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} />
+                  <Textarea placeholder="Your Message..." rows={4} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} />
                   <Button variant="hero" className="w-full" size="lg" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>

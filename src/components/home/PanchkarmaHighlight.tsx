@@ -14,10 +14,17 @@ const benefits = [
 ];
 
 const PanchkarmaHighlight = () => {
-  const { data } = useHospitalData("hospital");
-  const panchkarmaData = data?.panchkarma?.length > 0 ? data.panchkarma : null;
-  const displayBenefits = panchkarmaData ? panchkarmaData.map((p: any) => p.title || p.description) : benefits;
-  const image = panchkarmaData && panchkarmaData[0]?.image ? panchkarmaData[0].image : panchkarmaImg;
+  const { data } = useHospitalData("homepage");
+
+  const heading = data?.panchkarmaHeading || "Panchkarma Therapy Centre";
+  const description = data?.panchkarmaDescription || "Our Panchkarma Centre offers the five classical purification therapies — Vamana, Virechana, Basti, Nasya, and Raktamokshana — administered by certified Ayurvedic physicians in a serene, healing environment.";
+  const image = data?.panchkarmaImage || panchkarmaImg;
+
+  const rawBenefits = data?.panchkarmaBenefits || benefits;
+  const displayBenefits = rawBenefits.map((b: any) => {
+    if (typeof b === "string") return b;
+    return b.text || b.name || JSON.stringify(b);
+  });
 
   return (
     <section className="py-12 sm:py-20">
@@ -32,6 +39,9 @@ const PanchkarmaHighlight = () => {
                 loading="lazy"
                 width={1280}
                 height={720}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = panchkarmaImg;
+                }}
               />
               <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 gradient-gold rounded-xl px-4 sm:px-6 py-3 sm:py-4 shadow-gold">
                 <div className="font-serif text-xl sm:text-2xl font-bold text-foreground">{displayBenefits.length}+</div>
@@ -39,15 +49,15 @@ const PanchkarmaHighlight = () => {
               </div>
             </div>
           </ScrollReveal>
-
+ 
           <ScrollReveal delay={200}>
             <div>
               <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">Signature Treatment</span>
               <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mt-2 mb-5">
-                Panchkarma Therapy Centre
+                {heading}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-6">
-                Our Panchkarma Centre offers the five classical purification therapies — Vamana, Virechana, Basti, Nasya, and Raktamokshana — administered by certified Ayurvedic physicians in a serene, healing environment.
+                {description}
               </p>
               <ul className="space-y-3 mb-8">
                 {displayBenefits.slice(0, 5).map((b: string, i: number) => (

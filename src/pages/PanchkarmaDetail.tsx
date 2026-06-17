@@ -3,8 +3,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Clock, AlertCircle } from "lucide-react";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
-const therapyData: Record<string, {
+const fallbackTherapies: Record<string, {
   name: string; description: string; conditions: string[];
   procedure: string; duration: string; eligibility: string;
 }> = {
@@ -19,7 +20,7 @@ const therapyData: Record<string, {
   virechana: {
     name: "Virechana (Therapeutic Purgation)",
     description: "Virechana is a medically controlled purgation therapy that eliminates excess Pitta dosha and toxins from the liver, gallbladder, and GI tract.",
-    conditions: ["Liver Disorders", "Skin Diseases", "Chronic Digestive Issues", "Jaundice", "Hyperacidity", "Hormonal Imbalances"],
+    conditions: ["Liver Disorders", "Skin Diseases", "Chronic Digestive Issues", "Hyperacidity", "Hormonal Imbalances"],
     procedure: "Preparation includes 3-5 days of oleation and swedana. Purgative medicines are administered on the scheduled day. The entire process is monitored by experienced physicians.",
     duration: "5–8 days including preparation",
     eligibility: "Suitable for Pitta-dominant conditions. Contraindicated in pregnancy, rectal prolapse, and severe debility.",
@@ -60,7 +61,32 @@ const therapyData: Record<string, {
 
 const PanchkarmaDetail = () => {
   const { slug } = useParams();
-  const therapy = therapyData[slug || ""] || null;
+  const { data: dbTherapies } = useHospitalData("panchkarma");
+  const { data: homeData } = useHospitalData("homepage");
+
+  // Build current therapy data lookup
+  const getTherapies = () => {
+    if (!dbTherapies || dbTherapies.length === 0) return fallbackTherapies;
+    const res: Record<string, any> = {};
+    dbTherapies.forEach((t: any) => {
+      const conds = Array.isArray(t.conditions)
+        ? t.conditions.map((c: any) => typeof c === "string" ? c : (c.text || JSON.stringify(c)))
+        : [];
+      res[t.slug || ""] = {
+        name: t.name,
+        description: t.description,
+        conditions: conds,
+        procedure: t.procedure,
+        duration: t.duration,
+        eligibility: t.eligibility,
+        image: t.image
+      };
+    });
+    return res;
+  };
+
+  const therapyMap = getTherapies();
+  const therapy = therapyMap[slug || ""] || null;
 
   if (!therapy) {
     // Overview page
@@ -68,9 +94,11 @@ const PanchkarmaDetail = () => {
       <Layout>
         <section className="gradient-primary py-12 sm:py-20">
           <div className="section-container text-center">
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">Panchkarma Therapies</h1>
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
+              {homeData?.panchkarmaPageTitle || "Panchkarma Therapies"}
+            </h1>
             <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
-              The five classical purification therapies of Ayurveda for deep detoxification and rejuvenation.
+              {homeData?.panchkarmaPageSub || "The five classical purification therapies of Ayurveda for deep detoxification and rejuvenation."}
             </p>
           </div>
         </section>
@@ -79,18 +107,20 @@ const PanchkarmaDetail = () => {
           <div className="section-container">
             <ScrollReveal>
               <div className="bg-muted/50 rounded-2xl p-6 sm:p-8 mb-12">
-                <h2 className="font-serif text-xl sm:text-2xl font-bold text-foreground mb-4">What is Panchkarma?</h2>
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-foreground mb-4">
+                  {homeData?.whatIsPanchkarmaTitle || "What is Panchkarma?"}
+                </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Panchkarma literally means &ldquo;five actions&rdquo; — a comprehensive system of Ayurvedic detoxification that cleanses the body of accumulated toxins (Ama) and restores the natural balance of the three doshas: Vata, Pitta, and Kapha.
+                  {homeData?.whatIsPanchkarmaDesc1 || "Panchkarma literally means “five actions” — a comprehensive system of Ayurvedic detoxification that cleanses the body of accumulated toxins (Ama) and restores the natural balance of the three doshas: Vata, Pitta, and Kapha."}
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  At Ishan Ayurvedic Hospital, our Panchkarma Centre offers all five classical therapies under the guidance of experienced Ayurvedic physicians in a serene, healing environment equipped with both traditional instruments and modern amenities.
+                  {homeData?.whatIsPanchkarmaDesc2 || "At Ishan Ayurvedic Hospital, our Panchkarma Centre offers all five classical therapies under the guidance of experienced Ayurvedic physicians in a serene, healing environment equipped with both traditional instruments and modern amenities."}
                 </p>
               </div>
             </ScrollReveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(therapyData).map(([key, t], i) => (
+              {Object.entries(therapyMap).map(([key, t], i) => (
                 <ScrollReveal key={key} delay={i * 80}>
                   <Link to={`/panchkarma/${key}`} className="group block bg-card rounded-xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 h-full">
                     <h3 className="font-serif text-lg font-semibold text-foreground mb-2">{t.name}</h3>
@@ -127,7 +157,7 @@ const PanchkarmaDetail = () => {
               <div className="bg-card rounded-xl p-6 shadow-soft border border-border/50">
                 <h3 className="font-serif text-xl font-semibold text-foreground mb-4">Conditions Treated</h3>
                 <ul className="space-y-2.5">
-                  {therapy.conditions.map((c) => (
+                  {therapy.conditions.map((c: string) => (
                     <li key={c} className="flex items-center gap-2 text-sm text-foreground/80">
                       <CheckCircle className="w-4 h-4 text-primary shrink-0" /> {c}
                     </li>

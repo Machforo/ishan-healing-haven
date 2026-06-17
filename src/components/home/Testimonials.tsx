@@ -7,49 +7,20 @@ import { useHospitalData } from "@/hooks/useHospitalData";
 const defaultTestimonials = [
   {
     name: "Rajiv Mehta",
-    treatment: "Panchkarma Therapy",
-    quote:
-      "After years of chronic back pain, the Basti therapy at Ishan Hospital gave me incredible relief. The doctors were thorough and caring throughout my treatment.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=120&h=120",
-    location: "Greater Noida",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&h=400",
+    designation: "Patient",
+    feedback: "The Basti therapy at Ishan Hospital gave me incredible relief from chronic back pain. High quality care.",
+    type: "Ayurveda",
+    rating: 5
   },
   {
-    name: "Sunita Devi",
-    treatment: "Kayachikitsa – Diabetes Management",
-    quote:
-      "My blood sugar levels have stabilised significantly after Ayurvedic treatment here. The personalised diet plan and medicines made a real difference.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=120&h=120",
-    location: "Noida",
-  },
-  {
-    name: "Amit Verma",
-    treatment: "Shalya – Ksharasutra",
-    quote:
-      "I was scared of surgery for fistula, but the Ksharasutra procedure was minimally invasive with quick recovery. Highly recommend this hospital.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120&h=120",
-    location: "Delhi",
-  },
-  {
-    name: "Priya Sharma",
-    treatment: "Yoga & Wellness",
-    quote:
-      "The therapeutic yoga sessions helped me manage my anxiety and sleep issues naturally. The instructors are knowledgeable and supportive.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120&h=120",
-    location: "Ghaziabad",
-  },
-  {
-    name: "Mohan Lal",
-    treatment: "Nasya – Sinus Treatment",
-    quote:
-      "Suffered from chronic sinusitis for 10 years. After Nasya therapy at Ishan, I breathe freely again. Truly life-changing Ayurvedic care.",
-    rating: 5,
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120&h=120",
-    location: "Greater Noida",
-  },
+    name: "Suman Lata",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&h=400",
+    designation: "Patient",
+    feedback: "The Panchkarma treatments here are extremely authentic. The doctors took time to understand my concerns and treated the root cause of my joint issues.",
+    type: "Ayurveda",
+    rating: 5
+  }
 ];
 
 const Testimonials = () => {
@@ -61,14 +32,14 @@ const Testimonials = () => {
 
   const goTo = useCallback(
     (index: number) => {
-      if (animating) return;
+      if (animating || testimonials.length === 0) return;
       setAnimating(true);
       setTimeout(() => {
         setCurrent((index + testimonials.length) % testimonials.length);
         setAnimating(false);
       }, 300);
     },
-    [animating]
+    [animating, testimonials.length]
   );
 
   const next = useCallback(() => goTo(current + 1), [current, goTo]);
@@ -76,11 +47,14 @@ const Testimonials = () => {
 
   // Auto-slide every 4.5 seconds
   useEffect(() => {
+    if (testimonials.length === 0) return;
     const id = setInterval(next, 4500);
     return () => clearInterval(id);
-  }, [next]);
+  }, [next, testimonials.length]);
 
   const t = testimonials[current];
+
+  if (!t) return null;
 
   return (
     <section className="py-12 sm:py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">

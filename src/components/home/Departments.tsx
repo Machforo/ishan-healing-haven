@@ -1,26 +1,83 @@
 import { useState } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { ArrowRight, Leaf, Baby, Eye, Scissors, Dumbbell, FlaskConical, Pill, Heart, Search, X } from "lucide-react";
-
 import { useHospitalData } from "@/hooks/useHospitalData";
 
-const defaultDepartments = [
-  { icon: Heart,       name: "Kayachikitsa",  subtitle: "General Medicine",         path: "/departments/kayachikitsa",   color: "from-emerald-500 to-emerald-700", category: "Medicine" },
-  { icon: Leaf,        name: "Panchkarma",    subtitle: "Purification Therapy",      path: "/departments/panchkarma-opd", color: "from-amber-500 to-amber-700",    category: "Therapy" },
-  { icon: Heart,       name: "Prasuti Tantra",subtitle: "Gynaecology & Maternity",  path: "/departments/prasuti",        color: "from-pink-500 to-pink-700",      category: "Medicine" },
-  { icon: Baby,        name: "Kaumarabhritya",subtitle: "Paediatrics",               path: "/departments/kaumarabhritya", color: "from-sky-500 to-sky-700",        category: "Medicine" },
-  { icon: Eye,         name: "Shalakya Tantra",subtitle: "ENT & Eye Care",           path: "/departments/shalakya",       color: "from-violet-500 to-violet-700",  category: "Surgery" },
-  { icon: Scissors,    name: "Shalya Tantra", subtitle: "Ayurvedic Surgery",         path: "/departments/shalya",         color: "from-red-500 to-red-700",        category: "Surgery" },
-  { icon: Dumbbell,    name: "Yoga & Wellness",subtitle: "Therapeutic Yoga",         path: "/departments/yoga",           color: "from-teal-500 to-teal-700",      category: "Therapy" },
-  { icon: FlaskConical,name: "Pathology Lab", subtitle: "Diagnostics",               path: "/departments/pathology",      color: "from-indigo-500 to-indigo-700",  category: "Diagnostics" },
-  { icon: Pill,        name: "Pharmacy",      subtitle: "Dispensary",               path: "/departments/pharmacy",       color: "from-orange-500 to-orange-700",  category: "Diagnostics" },
+interface DepartmentType {
+  icon: any;
+  name: string;
+  subtitle: string;
+  path: string;
+  color: string;
+  category: string;
+  description?: string;
+}
+
+const defaultDepartments: DepartmentType[] = [
+  {
+    icon: Leaf,
+    name: "Kayachikitsa",
+    subtitle: "General Medicine",
+    path: "/departments/kayachikitsa",
+    color: "from-emerald-500 to-teal-500",
+    category: "Medicine",
+    description: "General medicine dealing with diagnosis and treatment of systemic diseases."
+  },
+  {
+    icon: Heart,
+    name: "Panchakarma",
+    subtitle: "Detoxification & Rejuvenation",
+    path: "/departments/panchakarma",
+    color: "from-rose-500 to-pink-500",
+    category: "Therapy",
+    description: "Specialised department for detoxification and rejuvenation therapies."
+  },
+  {
+    icon: Scissors,
+    name: "Shalya Tantra",
+    subtitle: "Ayurvedic Surgery",
+    path: "/departments/shalya",
+    color: "from-blue-500 to-indigo-500",
+    category: "Surgery",
+    description: "Ayurvedic surgery department managing anorectal and other surgical issues."
+  },
+  {
+    icon: Baby,
+    name: "Prasuti & Stri Roga",
+    subtitle: "Gynecology & Obstetrics",
+    path: "/departments/prasuti",
+    color: "from-amber-500 to-orange-500",
+    category: "Medicine",
+    description: "Obstetrics and gynaecology offering holistic maternity care."
+  }
 ];
+
+const iconMap: Record<string, any> = {
+  Heart,
+  Leaf,
+  Baby,
+  Eye,
+  Scissors,
+  Dumbbell,
+  FlaskConical,
+  Pill
+};
 
 const categories = ["All", "Medicine", "Therapy", "Surgery", "Diagnostics"];
 
 const Departments = () => {
   const { data } = useHospitalData("departments");
-  const departmentsData = data?.length > 0 ? data : (data?.data?.length > 0 ? data.data : defaultDepartments);
+  const { data: homeData } = useHospitalData("homepage");
+
+  // Determine actual departments list based on api response structure
+  let departmentsData: DepartmentType[] = defaultDepartments;
+  if (Array.isArray(data) && data.length > 0) {
+    departmentsData = data;
+  } else if (data?.data && Array.isArray(data.data) && data.data.length > 0) {
+    departmentsData = data.data;
+  } else if (data?.departments && Array.isArray(data.departments) && data.departments.length > 0) {
+    departmentsData = data.departments;
+  }
 
   const [activeFilter, setActiveFilter] = useState("All");
   const [query, setQuery] = useState("");
@@ -41,10 +98,10 @@ const Departments = () => {
           <div className="text-center mb-8 sm:mb-12">
             <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">Our Specialities</span>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mt-2 mb-3">
-              9 OPD Departments
+              {homeData?.departmentsHeading || "9 OPD Departments"}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base">
-              Comprehensive Ayurvedic care across all major specialities, led by experienced practitioners.
+              {homeData?.departmentsSubheading || "Comprehensive Ayurvedic care across all major specialities, led by experienced practitioners."}
             </p>
           </div>
         </ScrollReveal>
@@ -84,8 +141,8 @@ const Departments = () => {
                       : "bg-card text-foreground/70 border-border hover:border-primary/40 hover:text-primary"
                   }`}
                 >
-                  {cat}
-                </button>
+                  {cat
+                }</button>
               ))}
             </div>
           </div>
@@ -94,28 +151,39 @@ const Departments = () => {
         {/* Grid */}
         {filtered.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((dept, i) => (
-              <ScrollReveal key={dept.name} delay={i * 70}>
-                {/* Temporarily non-navigating — disabled */}
-                <div
-                  className="group block bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 cursor-default"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${dept.color || 'from-emerald-500 to-emerald-700'} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-soft`}>
-                      {dept.icon && typeof dept.icon !== 'string' ? <dept.icon className="w-6 h-6 text-white" /> : <Leaf className="w-6 h-6 text-white" />}
+            {filtered.map((dept, i) => {
+              const defaultIdx = defaultDepartments.length > 0 ? i % defaultDepartments.length : 0;
+              let Icon = defaultDepartments[defaultIdx]?.icon || Leaf;
+              if (dept.icon) {
+                if (typeof dept.icon === "string") {
+                  Icon = iconMap[dept.icon] || Icon;
+                } else {
+                  Icon = dept.icon;
+                }
+              }
+
+              return (
+                <ScrollReveal key={dept.name} delay={i * 70}>
+                  <div
+                    className="group block bg-card rounded-2xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 cursor-default"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${dept.color || (defaultDepartments[defaultIdx]?.color || "from-emerald-500 to-teal-500")} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-soft`}>
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">
+                        {dept.category || 'Medicine'}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">
-                      {dept.category || 'Medicine'}
+                    <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{dept.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4 leading-snug">{dept.subtitle || dept.description}</p>
+                    <span className="inline-flex items-center gap-1 text-sm font-medium text-primary/50 select-none">
+                      Coming soon <ArrowRight className="w-4 h-4" />
                     </span>
                   </div>
-                  <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{dept.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 leading-snug">{dept.subtitle || dept.description}</p>
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary/50 select-none">
-                    Coming soon <ArrowRight className="w-4 h-4" />
-                  </span>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-16">

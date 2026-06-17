@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useHospitalData } from "@/hooks/useHospitalData";
 import heroImg from "@/assets/hero-hospital.jpg";
 
+import { toast } from "sonner";
+
 const Hero = () => {
   const [form, setForm] = useState({ name: "", phone: "", dept: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
@@ -27,17 +29,23 @@ const Hero = () => {
     e.preventDefault();
     if (form.name && form.phone) {
       try {
-        await fetch("https://ishan-backend-g096.onrender.com/api/hospital/leads", {
+        const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+        const response = await fetch(`${apiBase}/hospital/leads`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...form, email: `${form.phone}@placeholder.com`, source: "Homepage Hero" }),
         });
+        if (!response.ok) {
+          throw new Error("Failed to submit enquiry");
+        }
+        setSubmitted(true);
+        setTimeout(() => setSubmitted(false), 4000);
+        setForm({ name: "", phone: "", dept: "", message: "" });
+        toast.success("Enquiry received! We will call you back shortly.");
       } catch (error) {
-        console.warn("Backend not reachable, simulating success", error);
+        console.error("Error submitting lead:", error);
+        toast.error("Failed to submit enquiry. Please try again.");
       }
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 4000);
-      setForm({ name: "", phone: "", dept: "", message: "" });
     }
   };
 
@@ -104,8 +112,8 @@ const Hero = () => {
               style={{ animationDelay: "0.35s" }}
             >
               {[
-                { icon: Clock, label: "OPD Hours", value: "Mon–Sat, 9 AM – 4 PM" },
-                { icon: Award, label: "Experience", value: "30+ Years of Trust" },
+                { icon: Clock, label: "OPD Hours", value: data?.opdHours || "Mon–Sat, 9 AM – 4 PM" },
+                { icon: Award, label: "Experience", value: data?.experienceText || "30+ Years of Trust" },
               ].map((item, i) => (
                 <div
                   key={i}

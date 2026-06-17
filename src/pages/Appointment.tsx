@@ -52,17 +52,21 @@ const Appointment = () => {
     };
 
     try {
-      await fetch("https://ishan-backend-g096.onrender.com/api/hospital/leads", {
+      const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const response = await fetch(`${apiBase}/hospital/leads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      if (!response.ok) {
+        throw new Error("Failed to book appointment");
+      }
+      setSubmitted(true);
+      toast({ title: "Appointment Request Sent", description: "Our team will call you within 2 hours to confirm." });
     } catch (err) {
-      console.warn("Error submitting lead:", err);
+      console.error("Error submitting lead:", err);
+      toast({ variant: "destructive", title: "Booking Failed", description: "Failed to submit appointment request. Please try again." });
     }
-
-    setSubmitted(true);
-    toast({ title: "Appointment Request Sent", description: "Our team will call you within 2 hours to confirm." });
   };
 
   return (

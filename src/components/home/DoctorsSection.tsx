@@ -5,56 +5,20 @@ import { Button } from "@/components/ui/button";
 import { ConsultationModal } from "@/components/ConsultationModal";
 import { useHospitalData } from "@/hooks/useHospitalData";
 
-const defaultDoctors = [
-  { 
-    name: "Dr. Anita Sharma", 
-    speciality: "Kayachikitsa (General Medicine)", 
-    category: "Medicine",
-    experience: "15+ years", 
-    days: "Mon, Wed, Fri",
-    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=400&h=400"
-  },
-  { 
-    name: "Dr. Rajesh Kumar", 
-    speciality: "Panchkarma Specialist", 
-    category: "Therapy",
-    experience: "12+ years", 
-    days: "Mon–Sat",
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400&h=400"
-  },
-  { 
-    name: "Dr. Priya Verma", 
-    speciality: "Prasuti Tantra (Gynaecology)", 
-    category: "Medicine",
-    experience: "10+ years", 
-    days: "Tue, Thu, Sat",
-    image: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&q=80&w=400&h=400"
-  },
-  { 
-    name: "Dr. Suresh Yadav", 
-    speciality: "Shalya Tantra (Surgery)", 
-    category: "Surgery",
-    experience: "18+ years", 
-    days: "Mon, Wed, Fri",
-    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=400&h=400"
-  },
-  { 
-    name: "Dr. Meera Gupta", 
-    speciality: "Shalakya (ENT & Eye)", 
-    category: "Surgery",
-    experience: "8+ years", 
-    days: "Tue, Thu",
-    image: "https://images.unsplash.com/photo-1614608682850-e0d6ed316d47?auto=format&fit=crop&q=80&w=400&h=400"
-  },
-  { 
-    name: "Dr. Vikram Singh", 
-    speciality: "Kaumarabhritya (Paediatrics)", 
-    category: "Medicine",
-    experience: "11+ years", 
-    days: "Mon–Fri",
-    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400&h=400"
-  },
-];
+interface DoctorType {
+  name: string;
+  speciality?: string;
+  designation?: string;
+  category?: string;
+  department?: string;
+  experience?: string;
+  qualifications?: string;
+  days?: string;
+  image?: string;
+  avatar?: string;
+}
+
+const defaultDoctors: DoctorType[] = [];
 
 const categories = ["All", "Medicine", "Therapy", "Surgery"];
 
@@ -62,7 +26,17 @@ const availabilityDays = ["All Days", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const DoctorsSection = () => {
   const { data } = useHospitalData("doctors");
-  const doctors = data?.length > 0 ? data : (data?.data?.length > 0 ? data.data : defaultDoctors);
+  const { data: homeData } = useHospitalData("homepage");
+
+  // Handle various api response shapes for doctors list
+  let doctors: DoctorType[] = defaultDoctors;
+  if (Array.isArray(data) && data.length > 0) {
+    doctors = data;
+  } else if (data?.data && Array.isArray(data.data) && data.data.length > 0) {
+    doctors = data.data;
+  } else if (data?.doctors && Array.isArray(data.doctors) && data.doctors.length > 0) {
+    doctors = data.doctors;
+  }
 
   const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
@@ -90,12 +64,14 @@ const DoctorsSection = () => {
       <div className="section-container">
         <ScrollReveal>
           <div className="text-center mb-8 sm:mb-12">
-            <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">Expert Care</span>
+            <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">
+              {homeData?.doctorsSubheading || "Expert Care"}
+            </span>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mt-2 mb-3">
-              Meet Our Ayurvedic Doctors
+              {homeData?.doctorsHeading || "Meet Our Ayurvedic Doctors"}
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base">
-              Our team of qualified Ayurvedic physicians brings decades of clinical experience and deep knowledge of classical texts.
+              {homeData?.doctorsDescription || "Our team of qualified Ayurvedic physicians brings decades of clinical experience and deep knowledge of classical texts."}
             </p>
           </div>
         </ScrollReveal>
@@ -163,7 +139,7 @@ const DoctorsSection = () => {
                   onClick={() => { setActiveCategory("All"); setActiveDay("All Days"); setQuery(""); }}
                   className="ml-2 text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 underline underline-offset-2"
                 >
-                  <X className="w-3 h-3" /> Clear all
+                  <X className="w-3.5 h-3.5" /> Clear all
                 </button>
               )}
             </div>
@@ -194,7 +170,7 @@ const DoctorsSection = () => {
                     {/* Category badge overlay */}
                     <div className="absolute top-3 left-3">
                       <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary/90 text-primary-foreground shadow-sm backdrop-blur-sm">
-                        {doc.category || doc.department || "Consultant"}
+                        {doc.category || doc.department || doc.speciality || "Consultant"}
                       </span>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

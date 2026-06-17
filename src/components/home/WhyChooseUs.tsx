@@ -3,10 +3,26 @@ import { useHospitalData } from "@/hooks/useHospitalData";
 import { Award, Heart, Users, Leaf, CheckCircle } from "lucide-react";
 
 const defaultReasons = [
-  { icon: Award, heading: "NCISM Approved", description: "Recognised teaching hospital under the National Commission for Indian System of Medicine." },
-  { icon: Heart, heading: "Affordable Care", description: "Quality Ayurvedic treatments at subsidised rates, making holistic healthcare accessible to all." },
-  { icon: Users, heading: "Expert Vaidyas", description: "Team of MD Ayurveda specialists with decades of clinical and academic experience." },
-  { icon: Leaf, heading: "Authentic Panchkarma", description: "Classical five-fold purification therapies administered per Charaka Samhita protocols." },
+  {
+    icon: Award,
+    heading: "Experienced Vaidyas",
+    description: "Our treatments are guided by highly qualified Ayurvedic doctors and Panchkarma specialists."
+  },
+  {
+    icon: Heart,
+    heading: "Authentic Medicines",
+    description: "We use high-quality, pure Ayurvedic formulations sourced from trusted traditional pharmacies."
+  },
+  {
+    icon: Users,
+    heading: "Holistic Approach",
+    description: "We address the root causes of illnesses, not just the symptoms, through tailored therapy plans."
+  },
+  {
+    icon: Leaf,
+    heading: "State-of-the-Art Facility",
+    description: "A peaceful environment with fully-equipped, hygienic Panchkarma rooms and modern amenities."
+  }
 ];
 
 const WhyChooseUs = () => {
@@ -18,16 +34,19 @@ const WhyChooseUs = () => {
       <div className="section-container">
         <ScrollReveal>
           <div className="text-center mb-10 sm:mb-14">
-            <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">Our Excellence</span>
+            <span className="text-xs sm:text-sm font-semibold text-accent uppercase tracking-wider">
+              {data?.whyChooseUsSub || "Why Choose Us"}
+            </span>
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mt-2">
-              Why Choose Us
+              {data?.whyChooseUsHeading || "Excellence in Ayurvedic Care"}
             </h2>
           </div>
         </ScrollReveal>
-
+ 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {reasons.map((r: any, i: number) => {
-            const Icon = r.icon && typeof r.icon !== 'string' ? r.icon : defaultReasons[i % defaultReasons.length].icon;
+            const defaultIdx = defaultReasons.length > 0 ? i % defaultReasons.length : 0;
+            const Icon = r.icon && typeof r.icon !== 'string' ? r.icon : (defaultReasons[defaultIdx]?.icon || Award);
             return (
               <ScrollReveal key={r.heading || i} delay={i * 100}>
                 <div className="bg-card rounded-xl p-6 shadow-soft border border-border/50 hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 h-full text-center flex flex-col items-center">

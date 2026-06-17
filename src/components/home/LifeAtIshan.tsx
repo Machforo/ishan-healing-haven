@@ -1,12 +1,7 @@
 import ScrollReveal from "@/components/ScrollReveal";
 import { useHospitalData } from "@/hooks/useHospitalData";
 
-const defaultImages = [
-  { image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=600" },
-  { image: "https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?auto=format&fit=crop&q=80&w=600" },
-  { image: "https://images.unsplash.com/photo-1576091160550-2173ff9e5eb8?auto=format&fit=crop&q=80&w=600" },
-  { image: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&q=80&w=600" },
-];
+const defaultImages = [];
 
 const LifeAtIshan = () => {
   const { data } = useHospitalData("homepage");

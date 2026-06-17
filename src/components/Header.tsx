@@ -4,6 +4,7 @@ import { Menu, X, Phone, Clock, MapPin, ChevronDown, Search, CalendarCheck } fro
 import logo from "@/assets/logo.png";
 import SearchOverlay from "@/components/SearchOverlay";
 import { ConsultationModal } from "@/components/ConsultationModal";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 const topBarItems = [
   { icon: Phone, text: "+91-XXXXX-XXXXX" },
@@ -53,12 +54,21 @@ const navItems = [
 ];
 
 const Header = () => {
+  const { data } = useHospitalData("homepage");
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [consultationOpen, setConsultationOpen] = useState(false);
   const location = useLocation();
+
+  const dynamicTopBarItems = [
+    { icon: Phone, text: data?.contactPhone || "+91-9582761166" },
+    { icon: Clock, text: `OPD: ${data?.opdHours || "Mon–Sat, 9 AM – 4 PM"}` },
+    { icon: MapPin, text: data?.contactAddress ? (data.contactAddress.includes(",") ? data.contactAddress.split(",")[1].trim() : data.contactAddress) : "Greater Noida, UP" },
+  ];
+
+  const headerNavItems = data?.navItems?.length > 0 ? data.navItems : navItems;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -92,7 +102,7 @@ const Header = () => {
         <div className="bg-primary text-primary-foreground hidden md:block">
           <div className="section-container flex justify-between items-center py-1.5">
             <div className="flex items-center gap-5">
-              {topBarItems.map((item, i) => (
+              {dynamicTopBarItems.map((item, i) => (
                 <span key={i} className="flex items-center gap-1.5 text-[11px]">
                   <item.icon className="w-3 h-3 opacity-80" />
                   {item.text}
@@ -133,7 +143,7 @@ const Header = () => {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center flex-1 justify-center">
-              {navItems.map((item) =>
+              {headerNavItems.map((item: any) =>
                 item.disabled ? (
                   <div
                     key={item.label}
@@ -202,7 +212,7 @@ const Header = () => {
           {isOpen && (
             <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-border shadow-elevated animate-fade-in z-[60] max-h-[80vh] overflow-y-auto">
               <div className="section-container py-5 space-y-1">
-                {navItems.map((item) => (
+                {headerNavItems.map((item: any) => (
                   <div key={item.label}>
                     {item.disabled ? (
                       <span className="block px-4 py-2.5 text-sm font-semibold text-foreground/30 cursor-not-allowed select-none rounded-lg">

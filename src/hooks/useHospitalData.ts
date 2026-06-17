@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
-const BASE_URL = "https://ishan-backend-g096.onrender.com/api/hospital";
-
 export function useHospitalData(endpoint: string) {
   return useQuery({
     queryKey: ["hospital", endpoint],
     queryFn: async () => {
-      const response = await fetch(`${BASE_URL}/${endpoint}`);
+      const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const response = await fetch(`${apiBase}/hospital/${endpoint}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch ${endpoint}`);
       }

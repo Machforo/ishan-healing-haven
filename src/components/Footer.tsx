@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Youtube, ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { useHospitalData } from "@/hooks/useHospitalData";
 
 // disabled: true = temporarily hidden (will be re-enabled when pages are ready)
 const quickLinks = [
@@ -30,6 +31,7 @@ const legalLinks = [
 ];
 
 const Footer = () => {
+  const { data } = useHospitalData("homepage");
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
@@ -38,18 +40,18 @@ const Footer = () => {
       <div className="gradient-gold py-12 sm:py-16">
         <div className="section-container text-center">
           <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-4">
-            Experience the Healing Power of Ayurveda
+            {data?.footerCtaHeading || "Experience the Healing Power of Ayurveda"}
           </h3>
           <p className="text-sm sm:text-base text-foreground/80 mb-8 max-w-xl mx-auto px-4">
-            Fill out the enquiry form above and take the first step towards holistic wellness.
+            {data?.footerCtaSubtext || "Fill out the enquiry form above and take the first step towards holistic wellness."}
           </p>
-          <button
-            disabled
-            title="Coming soon"
-            className="inline-flex items-center justify-center gap-2 gradient-primary/50 text-primary-foreground/60 px-8 py-4 rounded-lg font-bold shadow-soft cursor-not-allowed w-full sm:w-auto overflow-hidden text-sm sm:text-base"
-          >
-            Book Appointment Now
-          </button>
+          <Link to="/appointment">
+            <button
+              className="inline-flex items-center justify-center gap-2 gradient-primary text-primary-foreground px-8 py-4 rounded-lg font-bold shadow-soft hover:brightness-110 active:scale-95 transition-all w-full sm:w-auto overflow-hidden text-sm sm:text-base cursor-pointer"
+            >
+              {data?.footerCtaBtnText || "Book Appointment"}
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -64,17 +66,23 @@ const Footer = () => {
             </div>
           </Link>
           <p className="text-sm text-primary-foreground/70 leading-relaxed mb-5">
-            NCISM-approved teaching hospital providing authentic Ayurvedic treatments and Panchkarma therapies in Greater Noida.
+            {data?.footerDescription || "NCISM-approved teaching hospital providing authentic Ayurvedic treatments and Panchkarma therapies in Greater Noida."}
           </p>
           <div className="flex gap-3">
-            {[Facebook, Instagram, Youtube].map((Icon, i) => (
+            {[
+              { Icon: Facebook, url: data?.facebookUrl },
+              { Icon: Instagram, url: data?.instagramUrl },
+              { Icon: Youtube, url: data?.youtubeUrl }
+            ].map((item, i) => (
               <a
                 key={i}
-                href="#"
+                href={item.url || "#"}
+                target={item.url ? "_blank" : undefined}
+                rel={item.url ? "noopener noreferrer" : undefined}
                 className="w-9 h-9 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary transition-colors"
-                aria-label={`Visit our ${Icon.name} page`}
+                aria-label="Social Link"
               >
-                <Icon className="w-4 h-4" />
+                <item.Icon className="w-4 h-4" />
               </a>
             ))}
           </div>
@@ -83,7 +91,7 @@ const Footer = () => {
         <div>
           <h4 className="font-serif text-lg font-semibold mb-5 pb-2 border-b border-primary-foreground/10 sm:border-0">Quick Links</h4>
           <ul className="grid grid-cols-2 sm:grid-cols-1 gap-2.5">
-            {quickLinks.map((link) => (
+            {(data?.quickLinks?.length > 0 ? data.quickLinks : quickLinks).map((link: any) => (
               <li key={link.path}>
                 {link.disabled ? (
                   <span className="text-sm text-primary-foreground/35 cursor-not-allowed select-none">{link.label}</span>
@@ -98,7 +106,7 @@ const Footer = () => {
         <div>
           <h4 className="font-serif text-lg font-semibold mb-5 pb-2 border-b border-primary-foreground/10 sm:border-0">Patient Services</h4>
           <ul className="grid grid-cols-2 sm:grid-cols-1 gap-2.5">
-            {patientLinks.map((link) => (
+            {(data?.patientLinks?.length > 0 ? data.patientLinks : patientLinks).map((link: any) => (
               <li key={link.path}>
                 {link.disabled ? (
                   <span className="text-sm text-primary-foreground/35 cursor-not-allowed select-none">{link.label}</span>
@@ -115,19 +123,19 @@ const Footer = () => {
           <div className="space-y-4 text-sm text-primary-foreground/70">
             <div className="flex gap-3">
               <MapPin className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-              <span>Ishan Campus, Greater Noida, Gautam Buddh Nagar, UP – 201310</span>
+              <span>{data?.contactAddress || "Ishan Campus, Greater Noida, Gautam Buddh Nagar, UP – 201310"}</span>
             </div>
             <div className="flex gap-3">
               <Phone className="w-5 h-5 text-accent shrink-0" />
-              <span>+91-XXXXX-XXXXX</span>
+              <span>{data?.contactPhone || "+91-9582761166"}</span>
             </div>
             <div className="flex gap-3">
               <Mail className="w-5 h-5 text-accent shrink-0" />
-              <span>hospital@ishan.ac</span>
+              <span>{data?.contactEmail || "hospital@ishan.ac"}</span>
             </div>
             <div className="flex gap-3">
               <Clock className="w-5 h-5 text-accent shrink-0" />
-              <span>OPD: Mon–Sat, 9:00 AM – 4:00 PM</span>
+              <span>OPD: {data?.opdHours || "Mon–Sat, 9:00 AM – 4:00 PM"}</span>
             </div>
           </div>
         </div>
@@ -140,7 +148,7 @@ const Footer = () => {
             © {new Date().getFullYear()} Ishan Ayurvedic Hospital. All rights reserved. Part of Ishan Educational Institutions.
           </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 order-1 md:order-2">
-            {legalLinks.map((link) => (
+            {(data?.legalLinks?.length > 0 ? data.legalLinks : legalLinks).map((link: any) => (
               <span key={link.path} className="text-[10px] sm:text-xs text-primary-foreground/30 cursor-not-allowed select-none whitespace-nowrap">
                 {link.label}
               </span>
