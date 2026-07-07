@@ -14,6 +14,7 @@ import DepartmentsPage from "./pages/DepartmentsPage";
 import DepartmentDetail from "./pages/DepartmentDetail";
 import PanchkarmaDetail from "./pages/PanchkarmaDetail";
 import PatientServices from "./pages/PatientServices";
+import DynamicPageRenderer from "./components/DynamicPageRenderer";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,7 +61,8 @@ const App = () => {
               <Route path="/anti-ragging" element={<Navigate to="/" replace />} />
               <Route path="/grievance" element={<Navigate to="/" replace />} />
               <Route path="/posh-policy" element={<Navigate to="/" replace />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="/p/:slug" element={<DynamicPageRenderer portal="hospital" />} />
+            <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
