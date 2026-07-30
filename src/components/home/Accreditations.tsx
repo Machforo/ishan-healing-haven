@@ -37,12 +37,16 @@ const Accreditations = () => {
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
             {list.map((acc: any, i: number) => {
               const text = getAccreditationText(acc);
+              const image = acc?.image;
               return (
                 <div
                   key={text || i}
-                  className="bg-card rounded-lg px-3 sm:px-5 py-2 sm:py-3 shadow-soft border border-border/50 text-xs sm:text-sm text-foreground/80 font-medium hover:shadow-elevated hover:-translate-y-0.5 transition-all duration-300 text-center"
+                  className="bg-card rounded-xl px-4 sm:px-6 py-4 sm:py-5 shadow-soft border border-border/50 flex flex-col items-center justify-center gap-3 text-xs sm:text-sm text-foreground/80 font-medium hover:shadow-elevated hover:-translate-y-1 transition-all duration-300 text-center min-w-[140px] max-w-[200px]"
                 >
-                  {text}
+                  {image && (
+                    <img src={image} alt={text || "Accreditation"} className="h-12 object-contain" />
+                  )}
+                  <span>{text}</span>
                 </div>
               );
             })}

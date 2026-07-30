@@ -79,7 +79,8 @@ const PanchkarmaDetail = () => {
         procedure: t.procedure,
         duration: t.duration,
         eligibility: t.eligibility,
-        image: t.image
+        image: t.image,
+        gallery: t.gallery || []
       };
     });
     return res;
@@ -124,7 +125,7 @@ const PanchkarmaDetail = () => {
                 <ScrollReveal key={key} delay={i * 80}>
                   <Link to={`/panchkarma/${key}`} className="group block bg-card rounded-xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 h-full">
                     <h3 className="font-serif text-lg font-semibold text-foreground mb-2">{t.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{t.description}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{t.description}</p>
                     <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
                       Learn more <ArrowRight className="w-4 h-4" />
                     </span>
@@ -151,6 +152,14 @@ const PanchkarmaDetail = () => {
           <ScrollReveal>
             <p className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">{therapy.description}</p>
           </ScrollReveal>
+
+          {therapy.image && (
+            <ScrollReveal>
+              <div className="mb-10 rounded-2xl overflow-hidden shadow-lg border border-border/50">
+                <img src={therapy.image} alt={therapy.name} className="w-full max-h-[500px] object-cover" />
+              </div>
+            </ScrollReveal>
+          )}
 
           <div className="grid md:grid-cols-2 gap-8 mb-10">
             <ScrollReveal>
@@ -189,6 +198,30 @@ const PanchkarmaDetail = () => {
               </div>
             </ScrollReveal>
           </div>
+
+          {therapy.gallery && therapy.gallery.length > 0 && (
+            <ScrollReveal>
+              <div className="mt-16 mb-12">
+                <h3 className="font-serif text-2xl font-semibold text-foreground mb-8 text-center">Therapy Gallery</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {therapy.gallery.map((item: any, i: number) => (
+                    <div key={i} className="group relative rounded-xl overflow-hidden shadow-sm border border-border/50 aspect-square">
+                      <img 
+                        src={item.image} 
+                        alt={item.caption || `${therapy.name} Gallery Image ${i + 1}`} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      {item.caption && (
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                          <p className="text-white text-sm font-medium">{item.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+          )}
 
           <div className="text-center">
             <Link to="/appointment">

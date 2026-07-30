@@ -60,7 +60,7 @@ const PanchkarmaHighlight = () => {
                 {description}
               </p>
               <ul className="space-y-3 mb-8">
-                {displayBenefits.slice(0, 5).map((b: string, i: number) => (
+                {displayBenefits.map((b: string, i: number) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-sm text-foreground/80">{b}</span>

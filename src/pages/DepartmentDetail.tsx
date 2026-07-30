@@ -4,10 +4,9 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, Calendar, CheckCircle } from "lucide-react";
 
-const departmentData: Record<string, {
-  name: string; subtitle: string; description: string;
-  conditions: string[]; timings: string; doctors: { name: string; qual: string; days: string }[];
-}> = {
+import { useHospitalData } from "@/hooks/useHospitalData";
+
+const fallbackDepartments: Record<string, any> = {
   kayachikitsa: {
     name: "Kayachikitsa", subtitle: "General Medicine OPD",
     description: "The Kayachikitsa department provides comprehensive Ayurvedic treatment for internal diseases including metabolic, digestive, neurological, and musculoskeletal disorders. Our approach combines classical Ayurvedic pharmacology with modern diagnostic methods.",
@@ -75,7 +74,43 @@ const departmentData: Record<string, {
 
 const DepartmentDetail = () => {
   const { slug } = useParams();
-  const dept = departmentData[slug || ""] || departmentData.kayachikitsa;
+  const { data: dbDepartments } = useHospitalData("departments");
+  const { data: dbDoctors } = useHospitalData("doctors");
+
+  // Build current dept data lookup
+  const getDepartments = () => {
+    if (!dbDepartments || dbDepartments.length === 0) return fallbackDepartments;
+    const res: Record<string, any> = {};
+    dbDepartments.forEach((d: any) => {
+      // Find doctors for this department
+      const doctors = (dbDoctors || []).filter((doc: any) => doc.department === d.name).map((doc: any) => ({
+        name: doc.name,
+        qual: doc.qualification,
+        days: doc.days || doc.opdTimings || "Mon-Sat"
+      }));
+      
+      const conds = Array.isArray(d.treatments)
+        ? d.treatments.map((c: any) => typeof c === "string" ? c : (c.text || JSON.stringify(c)))
+        : [];
+      
+      res[d.slug || ""] = {
+        name: d.name,
+        subtitle: d.subtitle || "Specialised Department",
+        description: d.description,
+        conditions: conds,
+        timings: "Mon-Sat 9:00 AM - 4:00 PM",
+        doctors: doctors.length > 0 ? doctors : fallbackDepartments[d.slug || "kayachikitsa"]?.doctors || [],
+        image: d.image,
+        gallery: d.gallery || []
+      };
+    });
+    return res;
+  };
+
+  const deptMap = getDepartments();
+  const dept = deptMap[slug || ""] || fallbackDepartments.kayachikitsa || deptMap[Object.keys(deptMap)[0]];
+
+  if (!dept) return null;
 
   return (
     <Layout>
@@ -91,6 +126,14 @@ const DepartmentDetail = () => {
           <ScrollReveal>
             <p className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">{dept.description}</p>
           </ScrollReveal>
+
+          {dept.image && (
+            <ScrollReveal>
+              <div className="mb-10 rounded-2xl overflow-hidden shadow-lg border border-border/50">
+                <img src={dept.image} alt={dept.name} className="w-full max-h-[500px] object-cover" />
+              </div>
+            </ScrollReveal>
+          )}
 
           <div className="grid md:grid-cols-2 gap-10 mb-12">
             <ScrollReveal>
@@ -138,6 +181,30 @@ const DepartmentDetail = () => {
               </div>
             </ScrollReveal>
           </div>
+
+          {dept.gallery && dept.gallery.length > 0 && (
+            <ScrollReveal>
+              <div className="mt-16">
+                <h3 className="font-serif text-2xl font-semibold text-foreground mb-8 text-center">Facility & Gallery</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {dept.gallery.map((item: any, i: number) => (
+                    <div key={i} className="group relative rounded-xl overflow-hidden shadow-sm border border-border/50 aspect-square">
+                      <img 
+                        src={item.image} 
+                        alt={item.caption || `${dept.name} Gallery Image ${i + 1}`} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      {item.caption && (
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                          <p className="text-white text-sm font-medium">{item.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </ScrollReveal>
+          )}
         </div>
       </section>
     </Layout>

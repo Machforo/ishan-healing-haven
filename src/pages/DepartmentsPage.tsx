@@ -112,7 +112,7 @@ const DepartmentsPage = () => {
                     </div>
                     <h3 className="font-serif text-lg font-semibold text-foreground mb-1">{dept.name}</h3>
                     <p className="text-sm text-primary font-medium mb-2">{dept.subtitle || ""}</p>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{dept.desc || dept.description || ""}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{dept.desc || dept.description || ""}</p>
                     <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
                       View Details <ArrowRight className="w-4 h-4" />
                     </span>

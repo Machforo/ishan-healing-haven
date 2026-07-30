@@ -33,9 +33,16 @@ const PatientFAQs = () => {
       </section>
 
       <section className="py-12 sm:py-20">
-        <div className="section-container max-w-3xl">
-          <ScrollReveal>
-            <Accordion type="single" collapsible className="space-y-3">
+        <div className="section-container">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            <ScrollReveal>
+              <div className="rounded-2xl overflow-hidden shadow-lg border border-border/50 sticky top-24 hidden lg:block">
+                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1920&q=80" alt="Ayurvedic Treatment" className="w-full h-full object-cover" />
+              </div>
+            </ScrollReveal>
+            
+            <ScrollReveal delay={100}>
+              <Accordion type="single" collapsible className="space-y-4">
               {faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`} className="bg-card rounded-xl border border-border/50 shadow-soft px-5">
                   <AccordionTrigger className="text-left font-medium text-foreground hover:text-primary py-5">
@@ -47,7 +54,8 @@ const PatientFAQs = () => {
                 </AccordionItem>
               ))}
             </Accordion>
-          </ScrollReveal>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
     </Layout>
