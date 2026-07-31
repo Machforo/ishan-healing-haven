@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
+import PageGallery from "@/components/PageGallery";
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -58,7 +59,8 @@ const PatientFAQs = () => {
           </div>
         </div>
       </section>
-    </Layout>
+    <PageGallery />
+      </Layout>
   );
 };
 

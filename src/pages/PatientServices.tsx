@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, FileText, Stethoscope, BookOpen, HelpCircle, User } from "lucide-react";
 import { useHospitalData } from "@/hooks/useHospitalData";
+import PageGallery from "@/components/PageGallery";
 
 const iconMap: Record<string, any> = {
   Calendar,
@@ -58,6 +59,7 @@ const PatientServices = () => {
           </div>
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

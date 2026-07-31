@@ -7,8 +7,12 @@ import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useState } from "react";
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from "sonner";
 import { useHospitalData } from "@/hooks/useHospitalData";
+import PageGallery from "@/components/PageGallery";
 
 const Contact = () => {
   const { data } = useHospitalData("homepage");
@@ -103,18 +107,25 @@ const Contact = () => {
             <ScrollReveal delay={200}>
               <div className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated border border-border/50">
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input placeholder="Your Name" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-                    <Input type="tel" placeholder="Phone Number" required value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
-                  </div>
-                  <Input type="email" placeholder="Email Address" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                  <Input placeholder="Subject" value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} />
-                  <Textarea placeholder="Your Message..." rows={4} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} />
-                  <Button variant="hero" className="w-full" size="lg" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
+                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <input {...register("name")} placeholder="Full Name*" className={`w-full px-4 py-3 text-sm rounded-lg border ${errors.name ? 'border-red-500' : 'border-border/50'} bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all`} />
+                        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+                      </div>
+                      <div>
+                        <input {...register("phone")} type="tel" placeholder="Phone Number*" className={`w-full px-4 py-3 text-sm rounded-lg border ${errors.phone ? 'border-red-500' : 'border-border/50'} bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all`} />
+                        {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
+                      </div>
+                    </div>
+                    <div>
+                      <input {...register("email")} type="email" placeholder="Email Address" className={`w-full px-4 py-3 text-sm rounded-lg border ${errors.email ? 'border-red-500' : 'border-border/50'} bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all`} />
+                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                    </div>
+                    <button type="submit" disabled={isSubmitting} className="w-full py-3.5 text-sm font-semibold bg-navy text-primary-foreground rounded-lg shadow-lg hover:bg-navy/90 transition-all">
+                      {isSubmitting ? "Submitting..." : "Submit Enquiry"}
+                    </button>
+                  </form>
               </div>
             </ScrollReveal>
           </div>
@@ -136,6 +147,7 @@ const Contact = () => {
           </ScrollReveal>
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

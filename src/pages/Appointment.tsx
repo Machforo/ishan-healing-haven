@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState } from "react";
 import { CheckCircle, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import PageGallery from "@/components/PageGallery";
 
 const departments = [
   "Kayachikitsa (General Medicine)",
@@ -174,6 +175,7 @@ const Appointment = () => {
           )}
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

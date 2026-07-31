@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import { useHospitalData } from "@/hooks/useHospitalData";
+import PageGallery from "@/components/PageGallery";
 
 const fallbackTherapies: Record<string, {
   name: string; description: string; conditions: string[];
@@ -135,7 +136,8 @@ const PanchkarmaDetail = () => {
             </div>
           </div>
         </section>
-      </Layout>
+      <PageGallery images={data?.pageGallery} />
+    </Layout>
     );
   }
 
@@ -230,6 +232,7 @@ const PanchkarmaDetail = () => {
           </div>
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CheckCircle, Award, Users, Heart, Leaf, Eye, Target } from "lucide-react";
 import { useHospitalData } from "@/hooks/useHospitalData";
+import PageGallery from "@/components/PageGallery";
 
 const defaultReasons = [
   {
@@ -178,6 +179,7 @@ const WhyIshan = () => {
           </div>
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

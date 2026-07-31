@@ -5,6 +5,7 @@ import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { ConsultationModal } from "@/components/ConsultationModal";
 import { useHospitalData } from "@/hooks/useHospitalData";
+import PageGallery from "@/components/PageGallery";
 
 interface DoctorType {
   name: string;
@@ -100,6 +101,7 @@ const Doctors = () => {
           </div>
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

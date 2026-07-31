@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, Calendar, CheckCircle } from "lucide-react";
 
 import { useHospitalData } from "@/hooks/useHospitalData";
+import PageGallery from "@/components/PageGallery";
 
 const fallbackDepartments: Record<string, any> = {
   kayachikitsa: {
@@ -207,6 +208,7 @@ const DepartmentDetail = () => {
           )}
         </div>
       </section>
+    <PageGallery images={data?.pageGallery} />
     </Layout>
   );
 };

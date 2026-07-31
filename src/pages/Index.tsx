@@ -9,6 +9,7 @@ import Accreditations from "@/components/home/Accreditations";
 import InstitutionalProfile from "@/components/home/InstitutionalProfile";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LifeAtIshan from "@/components/home/LifeAtIshan";
+import PageGallery from "@/components/PageGallery";
 
 const Index = () => {
   return (
@@ -23,7 +24,8 @@ const Index = () => {
       <Testimonials />
       <LifeAtIshan />
       <Accreditations />
-    </Layout>
+    <PageGallery />
+      </Layout>
   );
 };
 
