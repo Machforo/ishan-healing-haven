@@ -34,12 +34,25 @@ const Appointment = () => {
     const phoneInput = inputs[1] as HTMLInputElement;
     const emailInput = inputs[2] as HTMLInputElement;
 
-    const textarea = target.querySelector('textarea') as HTMLTextAreaElement;
+    const nameRegex = /^[a-zA-Z\s.'-]+$/;
+    if (!nameInput?.value || !nameRegex.test(nameInput.value.trim())) {
+      toast({ variant: "destructive", title: "Invalid Name", description: "Name should only contain alphabets and spaces." });
+      return;
+    }
 
-    // Attempt to get the selected value from the Radix Select using aria attributes or standard DOM ways
-    // The Radix UI Select doesn't use a native select internally that is easy to query.
-    // To keep it simple, we will just use a generic course name, or try to find the hidden input if it exists.
-    // Or we just rely on standard values. Let's provide fallback.
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneInput?.value || !phoneRegex.test(phoneInput.value.trim())) {
+      toast({ variant: "destructive", title: "Invalid Phone", description: "Please enter a valid 10-digit phone number." });
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (emailInput?.value && !emailRegex.test(emailInput.value.trim())) {
+      toast({ variant: "destructive", title: "Invalid Email", description: "Please enter a valid email address." });
+      return;
+    }
+
+    const textarea = target.querySelector('textarea') as HTMLTextAreaElement;
     const deptInput = target.querySelector('[role="combobox"]') as HTMLElement;
     const deptText = deptInput?.textContent || "Unknown Department";
 
@@ -100,7 +113,7 @@ const Appointment = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-1.5">Full Name *</label>
-                    <Input placeholder="Enter your full name" required />
+                    <Input placeholder="Enter your full name" required onInput={(e: React.FormEvent<HTMLInputElement>) => { e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z\s.'-]/g, ''); }} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-1.5">Phone Number *</label>
@@ -175,7 +188,7 @@ const Appointment = () => {
           )}
         </div>
       </section>
-    <PageGallery images={data?.pageGallery} />
+    <PageGallery />
     </Layout>
   );
 };

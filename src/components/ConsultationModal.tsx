@@ -24,17 +24,30 @@ export function ConsultationModal({ open, onOpenChange, doctorName }: Consultati
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
     const target = e.currentTarget;
     const nameInput = target.querySelector('#name') as HTMLInputElement;
     const phoneInput = target.querySelector('#phone') as HTMLInputElement;
     const messageInput = target.querySelector('#message') as HTMLTextAreaElement;
 
+    const nameRegex = /^[a-zA-Z\s.'-]+$/;
+    if (!nameInput?.value || !nameRegex.test(nameInput.value.trim())) {
+      toast.error("Name should only contain alphabets and spaces.");
+      return;
+    }
+
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneInput?.value || !phoneRegex.test(phoneInput.value.trim())) {
+      toast.error("Phone number must be 10 digits.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     const data = {
-      name: nameInput?.value || "",
-      phone: phoneInput?.value || "",
-      email: `${phoneInput?.value || "unknown"}@placeholder.com`,
+      name: nameInput.value,
+      phone: phoneInput.value,
+      email: `${phoneInput.value}@placeholder.com`,
       message: messageInput?.value || "",
       course: doctorName || "General Consultation",
       source: "Consultation Modal"
@@ -78,7 +91,7 @@ export function ConsultationModal({ open, onOpenChange, doctorName }: Consultati
             <Label htmlFor="name" className="flex items-center gap-2">
               <User className="w-4 h-4 text-muted-foreground" /> Full Name
             </Label>
-            <Input id="name" placeholder="Enter your full name" required />
+            <Input id="name" placeholder="Enter your full name" required onInput={(e: React.FormEvent<HTMLInputElement>) => { e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z\s.'-]/g, ''); }} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone" className="flex items-center gap-2">

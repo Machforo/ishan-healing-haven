@@ -1,15 +1,8 @@
 import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
-import { Link } from "react-router-dom";
 
 import { useState } from "react";
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from "sonner";
 import { useHospitalData } from "@/hooks/useHospitalData";
 import PageGallery from "@/components/PageGallery";
@@ -35,7 +28,25 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone) return;
+
+    const nameRegex = /^[a-zA-Z\s.'-]+$/;
+    if (!formData.name || !nameRegex.test(formData.name.trim())) {
+      toast.error("Name should only contain alphabets and spaces.");
+      return;
+    }
+
+    const phoneRegex = /^\d{10}$/;
+    if (!formData.phone || !phoneRegex.test(formData.phone.trim())) {
+      toast.error("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (formData.email && !emailRegex.test(formData.email.trim())) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -107,25 +118,60 @@ const Contact = () => {
             <ScrollReveal delay={200}>
               <div className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated border border-border/50">
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
-                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <input {...register("name")} placeholder="Full Name*" className={`w-full px-4 py-3 text-sm rounded-lg border ${errors.name ? 'border-red-500' : 'border-border/50'} bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all`} />
-                        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
-                      </div>
-                      <div>
-                        <input {...register("phone")} type="tel" placeholder="Phone Number*" className={`w-full px-4 py-3 text-sm rounded-lg border ${errors.phone ? 'border-red-500' : 'border-border/50'} bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all`} />
-                        {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
-                      </div>
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Full Name*"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value.replace(/[^a-zA-Z\s.'-]/g, '') })}
+                        className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                      />
                     </div>
                     <div>
-                      <input {...register("email")} type="email" placeholder="Email Address" className={`w-full px-4 py-3 text-sm rounded-lg border ${errors.email ? 'border-red-500' : 'border-border/50'} bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all`} />
-                      {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Phone Number*"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                      />
                     </div>
-                    <button type="submit" disabled={isSubmitting} className="w-full py-3.5 text-sm font-semibold bg-navy text-primary-foreground rounded-lg shadow-lg hover:bg-navy/90 transition-all">
-                      {isSubmitting ? "Submitting..." : "Submit Enquiry"}
-                    </button>
-                  </form>
+                  </div>
+                  <div>
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Subject"
+                      value={formData.subject}
+                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                      className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                    />
+                  </div>
+                  <div>
+                    <textarea
+                      placeholder="Message"
+                      rows={4}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all resize-none"
+                    />
+                  </div>
+                  <button type="submit" disabled={isSubmitting} className="w-full py-3.5 text-sm font-semibold bg-navy text-primary-foreground rounded-lg shadow-lg hover:bg-navy/90 transition-all">
+                    {isSubmitting ? "Submitting..." : "Submit Message"}
+                  </button>
+                </form>
               </div>
             </ScrollReveal>
           </div>
