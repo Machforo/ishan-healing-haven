@@ -179,7 +179,7 @@ const WhyIshan = () => {
           </div>
         </div>
       </section>
-    <PageGallery images={data?.pageGallery} />
+    <PageGallery />
     </Layout>
   );
 };

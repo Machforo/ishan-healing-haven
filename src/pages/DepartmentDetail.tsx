@@ -208,7 +208,7 @@ const DepartmentDetail = () => {
           )}
         </div>
       </section>
-    <PageGallery images={data?.pageGallery} />
+    <PageGallery />
     </Layout>
   );
 };

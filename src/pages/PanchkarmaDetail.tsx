@@ -136,7 +136,7 @@ const PanchkarmaDetail = () => {
             </div>
           </div>
         </section>
-      <PageGallery images={data?.pageGallery} />
+      <PageGallery />
     </Layout>
     );
   }
@@ -232,7 +232,7 @@ const PanchkarmaDetail = () => {
           </div>
         </div>
       </section>
-    <PageGallery images={data?.pageGallery} />
+    <PageGallery />
     </Layout>
   );
 };
