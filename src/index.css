@@ -233,3 +233,202 @@ textarea:focus-visible {
   background: hsl(var(--primary) / 0.2);
   color: hsl(var(--foreground));
 }
+
+/* ---------------------------------------------------------------------------
+   CMS rich text
+   ---------------------------------------------------------------------------
+   Content authored in the admin panel arrives as HTML. Tailwind's preflight
+   strips list markers and heading/paragraph margins, and the base layer above
+   sizes h1–h4 as display headings — which is wrong inside a body-copy block.
+   `.rich-text` restores sensible document typography scoped to CMS output only.
+   Colour and font-size are inherited so the surrounding utility classes
+   (text-white, text-sm, text-foreground/70 …) keep working.
+   --------------------------------------------------------------------------- */
+@layer components {
+  .rich-text,
+  .format-rich-text,
+  .page-custom-section {
+    color: inherit;
+    overflow-wrap: break-word;
+  }
+
+  .rich-text > :first-child,
+  .format-rich-text > :first-child { margin-top: 0; }
+
+  .rich-text > :last-child,
+  .format-rich-text > :last-child { margin-bottom: 0; }
+
+  .rich-text p,
+  .format-rich-text p {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0 0 1em;
+  }
+
+  .rich-text h1, .format-rich-text h1,
+  .rich-text h2, .format-rich-text h2,
+  .rich-text h3, .format-rich-text h3,
+  .rich-text h4, .format-rich-text h4,
+  .rich-text h5, .format-rich-text h5,
+  .rich-text h6, .format-rich-text h6 {
+    color: inherit;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin: 1.6em 0 0.6em;
+  }
+
+  .rich-text h1, .format-rich-text h1 { font-size: 1.75em; }
+  .rich-text h2, .format-rich-text h2 { font-size: 1.5em; }
+  .rich-text h3, .format-rich-text h3 { font-size: 1.25em; }
+  .rich-text h4, .format-rich-text h4 { font-size: 1.1em; }
+  .rich-text h5, .format-rich-text h5,
+  .rich-text h6, .format-rich-text h6 { font-size: 1em; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .rich-text ul, .format-rich-text ul,
+  .rich-text ol, .format-rich-text ol {
+    margin: 0 0 1em;
+    padding-left: 1.5em;
+  }
+
+  .rich-text ul, .format-rich-text ul { list-style: disc; }
+  .rich-text ol, .format-rich-text ol { list-style: decimal; }
+  .rich-text ul ul, .format-rich-text ul ul { list-style: circle; }
+
+  .rich-text li, .format-rich-text li {
+    margin-bottom: 0.4em;
+    padding-left: 0.15em;
+  }
+
+  .rich-text li::marker,
+  .format-rich-text li::marker { color: hsl(var(--accent)); }
+
+  .rich-text li > p,
+  .format-rich-text li > p { margin-bottom: 0.35em; }
+
+  .rich-text li > ul, .format-rich-text li > ul,
+  .rich-text li > ol, .format-rich-text li > ol { margin: 0.4em 0 0.2em; }
+
+  .rich-text a, .format-rich-text a {
+    color: hsl(var(--primary));
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+    transition: color 0.2s ease;
+  }
+
+  .rich-text a:hover,
+  .format-rich-text a:hover { color: hsl(var(--accent)); }
+
+  .rich-text strong, .format-rich-text strong,
+  .rich-text b, .format-rich-text b { font-weight: 700; color: inherit; }
+
+  .rich-text em, .format-rich-text em,
+  .rich-text i, .format-rich-text i { font-style: italic; }
+
+  .rich-text blockquote,
+  .format-rich-text blockquote {
+    margin: 1.2em 0;
+    padding: 0.25em 0 0.25em 1.25em;
+    border-left: 3px solid hsl(var(--accent));
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .rich-text hr, .format-rich-text hr {
+    margin: 2em 0;
+    border: 0;
+    border-top: 1px solid hsl(var(--border));
+  }
+
+  .rich-text img, .format-rich-text img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    margin: 1.2em 0;
+  }
+
+  .rich-text iframe, .format-rich-text iframe,
+  .rich-text video, .format-rich-text video {
+    max-width: 100%;
+    border-radius: var(--radius);
+    margin: 1.2em 0;
+  }
+
+  /* Tables scroll rather than blowing out the page on mobile. */
+  .rich-text table, .format-rich-text table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    margin: 1.2em 0;
+    font-size: 0.95em;
+  }
+
+  .rich-text th, .format-rich-text th,
+  .rich-text td, .format-rich-text td {
+    border: 1px solid hsl(var(--border));
+    padding: 0.6em 0.85em;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .rich-text th, .format-rich-text th {
+    background: hsl(var(--muted));
+    font-weight: 700;
+  }
+
+  .rich-text code, .format-rich-text code {
+    background: hsl(var(--muted));
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .rich-text pre, .format-rich-text pre {
+    background: hsl(var(--muted));
+    padding: 1em;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin: 1.2em 0;
+  }
+
+  .rich-text pre code,
+  .format-rich-text pre code { background: none; padding: 0; }
+
+  /* Custom HTML sections authored in the admin panel bring their own layout —
+     only guarantee they never overflow horizontally. */
+  .page-custom-section img { max-width: 100%; height: auto; }
+  .page-custom-section table { display: block; overflow-x: auto; }
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive safety net
+   --------------------------------------------------------------------------- */
+@layer base {
+  /* Grid children default to min-width:auto, so one wide child (a data table,
+     a long file name, a full-width image) can push its column past the
+     viewport and create horizontal scroll on phones. */
+  .grid > * {
+    min-width: 0;
+  }
+}
+
+@layer utilities {
+  /* The pre-reveal state of .reveal-left / .reveal-right shifts elements 20px
+     sideways. On a phone a full-width element shifted right overhangs the
+     viewport, so the page scrolls horizontally until the reveal fires.
+     Below md the reveal animates vertically instead. */
+  @media (max-width: 767px) {
+    .reveal-left,
+    .reveal-right {
+      transform: translateY(16px);
+    }
+    .reveal-left.revealed,
+    .reveal-right.revealed {
+      transform: translateY(0);
+    }
+  }
+}

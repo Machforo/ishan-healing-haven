@@ -22,7 +22,7 @@ const LifeAtIshan = () => {
         </ScrollReveal>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {gallery.slice(0, 4).map((item: any, i: number) => (
+          {gallery.map((item: any, i: number) => (
             <ScrollReveal key={i} delay={i * 100}>
               <div className="rounded-xl overflow-hidden shadow-soft aspect-square group relative">
                 <img 

@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import { useHospitalData } from "@/hooks/useHospitalData";
-import PageGallery from "@/components/PageGallery";
+import { rt } from "@/lib/richText";
 
 const fallbackTherapies: Record<string, {
   name: string; description: string; conditions: string[];
@@ -126,7 +126,7 @@ const PanchkarmaDetail = () => {
                 <ScrollReveal key={key} delay={i * 80}>
                   <Link to={`/panchkarma/${key}`} className="group block bg-card rounded-xl p-6 shadow-soft hover:shadow-elevated transition-all duration-300 hover:-translate-y-1 border border-border/50 h-full">
                     <h3 className="font-serif text-lg font-semibold text-foreground mb-2">{t.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4">{t.description}</p>
+                    <div className="text-sm text-muted-foreground mb-4 line-clamp-3 rich-text" dangerouslySetInnerHTML={{ __html: rt(t.description) }} />
                     <span className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all">
                       Learn more <ArrowRight className="w-4 h-4" />
                     </span>
@@ -136,8 +136,7 @@ const PanchkarmaDetail = () => {
             </div>
           </div>
         </section>
-      <PageGallery />
-    </Layout>
+      </Layout>
     );
   }
 
@@ -152,7 +151,7 @@ const PanchkarmaDetail = () => {
       <section className="py-12 sm:py-20">
         <div className="section-container max-w-4xl">
           <ScrollReveal>
-            <p className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">{therapy.description}</p>
+            <div className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10 rich-text" dangerouslySetInnerHTML={{ __html: rt(therapy.description) }} />
           </ScrollReveal>
 
           {therapy.image && (
@@ -232,7 +231,6 @@ const PanchkarmaDetail = () => {
           </div>
         </div>
       </section>
-    <PageGallery />
     </Layout>
   );
 };

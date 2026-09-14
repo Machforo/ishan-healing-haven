@@ -14,6 +14,7 @@ import DepartmentsPage from "./pages/DepartmentsPage";
 import DepartmentDetail from "./pages/DepartmentDetail";
 import PanchkarmaDetail from "./pages/PanchkarmaDetail";
 import PatientServices from "./pages/PatientServices";
+import PatientFAQs from "./pages/PatientFAQs";
 import DynamicPageRenderer from "./components/DynamicPageRenderer";
 import NotFound from "./pages/NotFound";
 
@@ -51,6 +52,9 @@ const App = () => {
               <Route path="/panchkarma" element={<PanchkarmaDetail />} />
               <Route path="/panchkarma/:slug" element={<PanchkarmaDetail />} />
               <Route path="/patient-services" element={<PatientServices />} />
+              {/* Declared before the catch-all so the Footer / search link to
+                  "Patient FAQs" reaches the FAQ page instead of the index. */}
+              <Route path="/patient-services/faqs" element={<PatientFAQs />} />
               <Route path="/patient-services/*" element={<PatientServices />} />
               <Route path="/patient-portal" element={<Navigate to="/" replace />} />
               <Route path="/careers" element={<Navigate to="/" replace />} />

@@ -2,9 +2,9 @@ import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { CheckCircle, Award, Users, Heart, Leaf, Eye, Target } from "lucide-react";
+import { CheckCircle, Award, Heart, Leaf, Eye, Target } from "lucide-react";
 import { useHospitalData } from "@/hooks/useHospitalData";
-import PageGallery from "@/components/PageGallery";
+import DynamicPageSections from "@/components/DynamicPageSections";
 
 const defaultReasons = [
   {
@@ -18,7 +18,7 @@ const defaultReasons = [
     desc: "We use high-quality, pure Ayurvedic formulations sourced from trusted traditional pharmacies."
   },
   {
-    icon: Users,
+    icon: CheckCircle,
     title: "Holistic Approach",
     desc: "We address the root causes of illnesses, not just the symptoms, through tailored therapy plans."
   },
@@ -50,9 +50,8 @@ const WhyIshan = () => {
   const rawTags = aboutData?.missionVision?.values || ["Personalised Care", "In-House Pharmacy", "Herbal Garden", "Research-Backed", "Patient-Centric"];
   const displayTags = rawTags.map((v: any) => typeof v === 'string' ? v : (v.text || JSON.stringify(v)));
 
-  return (
-    <Layout>
-      {/* Page Header */}
+  const defaultSections = {
+    header: (
       <section className="gradient-primary py-12 sm:py-20">
         <div className="section-container text-center">
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
@@ -63,8 +62,8 @@ const WhyIshan = () => {
           </p>
         </div>
       </section>
-
-      {/* Our Story Section */}
+    ),
+    story: (
       <section className="py-16 sm:py-24 bg-background">
         <div className="section-container">
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
@@ -94,12 +93,11 @@ const WhyIshan = () => {
           </div>
         </div>
       </section>
-
-      {/* Mission & Vision Section */}
+    ),
+    missionVision: (
       <section className="py-16 bg-muted/40 border-y border-border/40">
         <div className="section-container">
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Vision Card */}
             <ScrollReveal>
               <div className="h-full bg-card rounded-2xl p-8 shadow-soft border border-border/50 flex flex-col sm:flex-row gap-6">
                 <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -112,7 +110,6 @@ const WhyIshan = () => {
               </div>
             </ScrollReveal>
 
-            {/* Mission Card */}
             <ScrollReveal delay={150}>
               <div className="h-full bg-card rounded-2xl p-8 shadow-soft border border-border/50 flex flex-col sm:flex-row gap-6">
                 <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -126,7 +123,6 @@ const WhyIshan = () => {
             </ScrollReveal>
           </div>
 
-          {/* Core Values */}
           <ScrollReveal delay={300}>
             <div className="bg-card rounded-xl p-6 sm:p-8 shadow-soft border border-border/50 text-center">
               <h4 className="text-sm font-semibold tracking-wider text-muted-foreground uppercase mb-6">Our Core Pillars & Values</h4>
@@ -141,8 +137,8 @@ const WhyIshan = () => {
           </ScrollReveal>
         </div>
       </section>
-
-      {/* Why Choose Us (Reasons Grid) */}
+    ),
+    whyChooseUs: (
       <section className="py-16 sm:py-24">
         <div className="section-container">
           <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
@@ -159,7 +155,7 @@ const WhyIshan = () => {
               const defaultIdx = defaultReasons.length > 0 ? i % defaultReasons.length : 0;
               const Icon = r.icon && typeof r.icon !== 'string' ? r.icon : (defaultReasons[defaultIdx]?.icon || Award);
               return (
-                <ScrollReveal key={r.title || r.heading} delay={i * 100}>
+                <ScrollReveal key={r.title || r.heading || i} delay={i * 100}>
                   <div className="h-full flex flex-col p-6 bg-card rounded-xl shadow-soft border border-border/50 hover:shadow-elevated hover:border-primary/20 transition-all duration-300">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 shrink-0">
                       <Icon className="w-6 h-6 text-primary" />
@@ -179,7 +175,18 @@ const WhyIshan = () => {
           </div>
         </div>
       </section>
-    <PageGallery />
+    ),
+  };
+
+  const defaultOrder = ["header", "story", "missionVision", "whyChooseUs"];
+
+  return (
+    <Layout>
+      <DynamicPageSections
+        pageId="about_us"
+        defaultSections={defaultSections}
+        defaultOrder={defaultOrder}
+      />
     </Layout>
   );
 };

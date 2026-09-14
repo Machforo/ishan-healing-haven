@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, Calendar, CheckCircle } from "lucide-react";
 
 import { useHospitalData } from "@/hooks/useHospitalData";
-import PageGallery from "@/components/PageGallery";
+import { rt } from "@/lib/richText";
+
 
 const fallbackDepartments: Record<string, any> = {
   kayachikitsa: {
@@ -125,7 +126,7 @@ const DepartmentDetail = () => {
       <section className="py-12 sm:py-20">
         <div className="section-container max-w-4xl">
           <ScrollReveal>
-            <p className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">{dept.description}</p>
+            <div className="text-muted-foreground leading-relaxed text-base sm:text-lg mb-8 sm:mb-10 rich-text" dangerouslySetInnerHTML={{ __html: rt(dept.description) }} />
           </ScrollReveal>
 
           {dept.image && (
@@ -208,7 +209,6 @@ const DepartmentDetail = () => {
           )}
         </div>
       </section>
-    <PageGallery />
     </Layout>
   );
 };

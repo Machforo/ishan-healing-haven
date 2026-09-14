@@ -1,11 +1,10 @@
 import Layout from "@/components/Layout";
 import ScrollReveal from "@/components/ScrollReveal";
 import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
-
 import { useState } from "react";
 import { toast } from "sonner";
 import { useHospitalData } from "@/hooks/useHospitalData";
-import PageGallery from "@/components/PageGallery";
+import DynamicPageSections from "@/components/DynamicPageSections";
 
 const Contact = () => {
   const { data } = useHospitalData("homepage");
@@ -61,124 +60,139 @@ const Contact = () => {
           source: "Contact Page"
         }),
       });
-      if (!response.ok) {
-        throw new Error("Failed to send message");
+
+      if (response.ok) {
+        toast.success("Message sent successfully! We will get back to you soon.");
+        setFormData({ name: "", phone: "", email: "", subject: "", message: "" });
+      } else {
+        toast.error("Failed to send message. Please try again.");
       }
-      toast.success("Message sent! We'll get back to you shortly.");
-      setFormData({ name: "", phone: "", email: "", subject: "", message: "" });
-    } catch (err) {
-      toast.error("Failed to send message. Please try again.");
+    } catch {
+      toast.error("Network error. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return (
-    <Layout>
-      <section className="gradient-primary py-12 sm:py-20">
+  const defaultSections = {
+    header: (
+      <section className="gradient-primary py-14 sm:py-20">
         <div className="section-container text-center">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-white/10 text-primary-foreground text-xs font-semibold tracking-wider uppercase mb-3">
+            Patient Services & Inquiries
+          </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
-            Contact Us
+            Contact Ishan Ayurvedic Hospital
           </h1>
           <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
-            Reach us for appointments, enquiries, or directions. We&apos;re here to help.
+            We are here to assist you with OPD appointments, Panchakarma admissions, casualty, or queries.
           </p>
         </div>
       </section>
-
-      <section className="py-12 sm:py-20">
+    ),
+    contactCards: (
+      <section className="py-12 sm:py-16 bg-muted/30 border-b border-border/50">
         <div className="section-container">
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12">
-            <ScrollReveal>
-              <div>
-                <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Get In Touch</h2>
-                <div className="space-y-5 mb-8">
-                  {contactInfo.map((item) => (
-                    <div key={item.label} className="flex gap-4">
-                      <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center shrink-0">
-                        <item.icon className="w-5 h-5 text-primary-foreground" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">{item.label}</div>
-                        <div className="text-sm text-muted-foreground">{item.value}</div>
-                      </div>
-                    </div>
-                  ))}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {contactInfo.map((item) => (
+              <div key={item.label} className="flex gap-4 p-5 rounded-2xl bg-card border border-border/50 shadow-soft items-start">
+                <div className="w-11 h-11 rounded-xl gradient-primary flex items-center justify-center shrink-0 shadow-sm">
+                  <item.icon className="w-5 h-5 text-primary-foreground" />
                 </div>
-
-                <div className="bg-muted/50 rounded-xl p-5">
-                  <h3 className="font-serif text-lg font-semibold text-foreground mb-2">How to Reach Us</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    We are located near Pari Chowk, Greater Noida. From Pari Chowk Metro Station, take an auto-rickshaw to Ishan Campus (approx. 10 minutes). Ample parking available on campus.
-                  </p>
+                <div>
+                  <div className="text-xs font-bold text-primary uppercase tracking-wider mb-1">{item.label}</div>
+                  <div className="text-sm font-medium text-foreground leading-relaxed">{item.value}</div>
                 </div>
               </div>
-            </ScrollReveal>
-
-            <ScrollReveal delay={200}>
-              <div className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated border border-border/50">
-                <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Full Name*"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value.replace(/[^a-zA-Z\s.'-]/g, '') })}
-                        className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="Phone Number*"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
-                      />
-                    </div>
-                  </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    ),
+    formSection: (
+      <section className="py-12 sm:py-20">
+        <div className="section-container max-w-4xl">
+          <ScrollReveal>
+            <div className="bg-card rounded-3xl p-6 sm:p-10 shadow-elevated border border-border/50">
+              <div className="text-center mb-8">
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground mb-2">Send Us a Direct Message</h2>
+                <p className="text-sm text-muted-foreground">Our hospital administration desk responds to all messages within 24 hours</p>
+              </div>
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
-                    />
-                  </div>
-                  <div>
+                    <label className="block text-xs font-semibold text-foreground mb-1.5">Full Name *</label>
                     <input
                       type="text"
-                      placeholder="Subject"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                      required
+                      placeholder="Enter your full name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value.replace(/[^a-zA-Z\s.'-]/g, '') })}
+                      className="w-full px-4 py-3 text-sm rounded-xl border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
                     />
                   </div>
                   <div>
-                    <textarea
-                      placeholder="Message"
-                      rows={4}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-3 text-sm rounded-lg border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all resize-none"
+                    <label className="block text-xs font-semibold text-foreground mb-1.5">Phone Number *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="+91 XXXXX XXXXX"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full px-4 py-3 text-sm rounded-xl border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
                     />
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="w-full py-3.5 text-sm font-semibold bg-navy text-primary-foreground rounded-lg shadow-lg hover:bg-navy/90 transition-all">
-                    {isSubmitting ? "Submitting..." : "Submit Message"}
-                  </button>
-                </form>
-              </div>
-            </ScrollReveal>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">Email Address</label>
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 text-sm rounded-xl border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">Subject / Department</label>
+                  <input
+                    type="text"
+                    placeholder="E.g., Panchakarma Inquiry, Medical Certificate, OPD Booking"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    className="w-full px-4 py-3 text-sm rounded-xl border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-foreground mb-1.5">Message / Inquiry Details</label>
+                  <textarea
+                    placeholder="Write your query or message here..."
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full px-4 py-3 text-sm rounded-xl border border-border/50 bg-background/50 focus:bg-background focus:outline-none focus:ring-2 transition-all resize-none"
+                  />
+                </div>
+                <button type="submit" disabled={isSubmitting} className="w-full py-3.5 text-sm font-bold bg-primary text-primary-foreground rounded-xl shadow-lg hover:bg-primary/90 transition-all cursor-pointer">
+                  {isSubmitting ? "Submitting Message..." : "Submit Message"}
+                </button>
+              </form>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+    ),
+    mapLocation: (
+      <section className="py-12 bg-muted/40 border-y border-border/50">
+        <div className="section-container">
+          <div className="max-w-3xl mx-auto text-center mb-8">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground mb-2">Hospital Location & Campus Map</h2>
+            <p className="text-sm text-muted-foreground">
+              Conveniently located near Pari Chowk, Greater Noida with round-the-clock emergency vehicle access.
+            </p>
           </div>
-
-          {/* Map */}
           <ScrollReveal>
-            <div className="mt-10 sm:mt-16 rounded-2xl overflow-hidden shadow-elevated h-64 sm:h-80">
+            <div className="rounded-3xl overflow-hidden shadow-elevated h-72 sm:h-96 border border-border/60">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.5!2d77.49!3d28.47!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sIshan+Institute!5e0!3m2!1sen!2sin!4v1"
                 width="100%"
@@ -193,7 +207,40 @@ const Contact = () => {
           </ScrollReveal>
         </div>
       </section>
-    <PageGallery images={data?.pageGallery} />
+    ),
+    emergencyBanner: (
+      <section className="pb-16 pt-8">
+        <div className="section-container">
+          <div className="gradient-primary rounded-3xl p-8 sm:p-12 text-center shadow-elevated">
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
+              Immediate Assistance Required?
+            </h2>
+            <p className="text-primary-foreground/80 max-w-lg mx-auto text-sm mb-6">
+              Our 24-hour reception and emergency medical officers are on duty 7 days a week.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a
+                href={`tel:${phone}`}
+                className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-gold text-navy font-bold shadow-md hover:bg-gold-light transition-all text-sm"
+              >
+                Call Hospital: {phone}
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  };
+
+  const defaultOrder = ["header", "contactCards", "formSection", "mapLocation", "emergencyBanner"];
+
+  return (
+    <Layout>
+      <DynamicPageSections
+        pageId="contact"
+        defaultSections={defaultSections}
+        defaultOrder={defaultOrder}
+      />
     </Layout>
   );
 };

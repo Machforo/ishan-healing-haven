@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState } from "react";
 import { CheckCircle, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import PageGallery from "@/components/PageGallery";
+import DynamicPageSections from "@/components/DynamicPageSections";
 
 const departments = [
   "Kayachikitsa (General Medicine)",
@@ -72,48 +72,93 @@ const Appointment = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      if (!response.ok) {
-        throw new Error("Failed to book appointment");
+
+      if (response.ok) {
+        setSubmitted(true);
+        toast({ title: "Appointment Requested!", description: "We will contact you shortly to confirm." });
+      } else {
+        toast({ variant: "destructive", title: "Submission Failed", description: "Failed to submit appointment request. Please try again." });
       }
-      setSubmitted(true);
-      toast({ title: "Appointment Request Sent", description: "Our team will call you within 2 hours to confirm." });
     } catch (err) {
       console.error("Error submitting lead:", err);
       toast({ variant: "destructive", title: "Booking Failed", description: "Failed to submit appointment request. Please try again." });
     }
   };
 
-  return (
-    <Layout>
-      <section className="gradient-primary py-12 sm:py-20">
+  const defaultSections = {
+    header: (
+      <section className="gradient-primary py-14 sm:py-20">
         <div className="section-container text-center">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-white/10 text-primary-foreground text-xs font-semibold tracking-wider uppercase mb-3">
+            Quick Clinical Consultation
+          </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-4">
             Book an Appointment
           </h1>
           <p className="text-primary-foreground/80 max-w-2xl mx-auto text-base sm:text-lg">
-            Fill the form below and our counsellor will call you within 2 hours to confirm your appointment.
+            Schedule an in-person OPD consultation or Nadi Pariksha examination with our senior Ayurvedic doctors.
           </p>
         </div>
       </section>
-
+    ),
+    quickHelp: (
+      <section className="py-8 bg-muted/40 border-b border-border/50">
+        <div className="section-container max-w-4xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-card border border-border/50 shadow-soft flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase font-semibold">Immediate Assistance</p>
+                <p className="font-bold text-foreground text-sm">Call Hospital Desk</p>
+              </div>
+              <a
+                href="tel:+919582761166"
+                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all"
+              >
+                +91-9582761166
+              </a>
+            </div>
+            <div className="p-4 rounded-xl bg-card border border-border/50 shadow-soft flex items-center justify-between">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase font-semibold">WhatsApp Desk</p>
+                <p className="font-bold text-foreground text-sm">Chat with Coordinator</p>
+              </div>
+              <a
+                href="https://wa.me/919582761166"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-all flex items-center gap-1.5"
+              >
+                <Phone className="w-3.5 h-3.5" /> Instant Chat
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+    formSection: (
       <section className="py-12 sm:py-20">
         <div className="section-container max-w-3xl">
           {submitted ? (
             <ScrollReveal>
-              <div className="text-center py-16">
+              <div className="text-center py-16 bg-card rounded-2xl border border-border/50 shadow-elevated p-8">
                 <CheckCircle className="w-16 h-16 text-primary mx-auto mb-5" />
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-3">Request Submitted!</h2>
-                <p className="text-muted-foreground mb-6">Our team will contact you shortly to confirm your appointment.</p>
-                <Button variant="hero" onClick={() => setSubmitted(false)}>Book Another</Button>
+                <p className="text-muted-foreground mb-6">Our team will contact you shortly to confirm your appointment time and doctor slot.</p>
+                <Button variant="hero" onClick={() => setSubmitted(false)}>Book Another Appointment</Button>
               </div>
             </ScrollReveal>
           ) : (
             <ScrollReveal>
-              <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-5 sm:p-8 shadow-elevated space-y-5 border border-border/50">
+              <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 sm:p-10 shadow-elevated space-y-5 border border-border/50">
+                <div className="border-b border-border/50 pb-4 mb-2">
+                  <h3 className="font-serif text-xl font-bold text-foreground">Patient Information</h3>
+                  <p className="text-xs text-muted-foreground">Please fill in patient details for quick hospital file registration</p>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-1.5">Full Name *</label>
-                    <Input placeholder="Enter your full name" required onInput={(e: React.FormEvent<HTMLInputElement>) => { e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z\s.'-]/g, ''); }} />
+                    <Input placeholder="Enter patient's full name" required onInput={(e: React.FormEvent<HTMLInputElement>) => { e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z\s.'-]/g, ''); }} />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-1.5">Phone Number *</label>
@@ -123,11 +168,11 @@ const Appointment = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Email Address</label>
                     <Input type="email" placeholder="your@email.com" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">Department *</label>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Department / Speciality *</label>
                     <Select required>
                       <SelectTrigger>
                         <SelectValue placeholder="Select department" />
@@ -147,13 +192,13 @@ const Appointment = () => {
                     <Input type="date" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground mb-1.5">Preferred Time</label>
+                    <label className="block text-sm font-medium text-foreground mb-1.5">Preferred Time Slot</label>
                     <Select>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select time" />
+                        <SelectValue placeholder="Select slot" />
                       </SelectTrigger>
                       <SelectContent>
-                        {["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM"].map((t) => (
+                        {["9:00 AM - 10:00 AM", "10:00 AM - 11:00 AM", "11:00 AM - 12:00 PM", "12:00 PM - 1:00 PM", "2:00 PM - 3:00 PM", "3:00 PM - 4:00 PM"].map((t) => (
                           <SelectItem key={t} value={t}>{t}</SelectItem>
                         ))}
                       </SelectContent>
@@ -163,24 +208,24 @@ const Appointment = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-1.5">Chief Complaint / Symptoms</label>
-                  <Textarea placeholder="Briefly describe your symptoms or reason for visit..." rows={4} />
+                  <Textarea placeholder="Briefly describe your health condition or symptoms..." rows={4} />
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                  <Button type="submit" variant="hero" size="lg" className="flex-1">
+                  <Button type="submit" variant="hero" size="lg" className="flex-1 font-bold">
                     Submit Appointment Request
                   </Button>
                   <a
-                    href="https://wa.me/91XXXXXXXXXX"
+                    href="https://wa.me/919582761166"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 border-2 border-primary text-primary rounded-lg px-6 py-3 font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
+                    className="flex items-center justify-center gap-2 border-2 border-primary text-primary rounded-lg px-6 py-3 font-semibold hover:bg-primary hover:text-primary-foreground transition-all text-sm"
                   >
                     <Phone className="w-4 h-4" /> WhatsApp Booking
                   </a>
                 </div>
 
-                <p className="text-xs text-muted-foreground text-center">
+                <p className="text-xs text-muted-foreground text-center pt-2">
                   Walk-in patients welcome during OPD hours: Mon–Sat, 9:00 AM – 4:00 PM
                 </p>
               </form>
@@ -188,7 +233,72 @@ const Appointment = () => {
           )}
         </div>
       </section>
-    <PageGallery />
+    ),
+    guidelines: (
+      <section className="py-14 bg-muted/40 border-y border-border/50">
+        <div className="section-container max-w-4xl">
+          <div className="text-center mb-8">
+            <h3 className="font-serif text-2xl font-bold text-foreground mb-2">Instructions for Your Visit</h3>
+            <p className="text-sm text-muted-foreground">Please review these basic recommendations prior to your pulse diagnosis appointment</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6">
+            <div className="p-5 rounded-xl bg-card border border-border/50 shadow-soft">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center mb-3 text-sm">
+                1
+              </div>
+              <h4 className="font-serif font-bold text-foreground text-base mb-1">Nadi Pariksha Prep</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                For accurate pulse diagnosis, please avoid heavy meals, caffeine, or strenuous exercise for 2.5 hours prior.
+              </p>
+            </div>
+            <div className="p-5 rounded-xl bg-card border border-border/50 shadow-soft">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center mb-3 text-sm">
+                2
+              </div>
+              <h4 className="font-serif font-bold text-foreground text-base mb-1">Medical Reports</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Carry any existing blood tests, imaging (X-ray, MRI, ultrasound), and current prescription medicines.
+              </p>
+            </div>
+            <div className="p-5 rounded-xl bg-card border border-border/50 shadow-soft">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center mb-3 text-sm">
+                3
+              </div>
+              <h4 className="font-serif font-bold text-foreground text-base mb-1">Arrival Time</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Arrive 15 minutes before your time slot to complete initial vitals check at the reception desk.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    ),
+    opdHoursCard: (
+      <section className="pb-16 pt-8">
+        <div className="section-container max-w-4xl">
+          <div className="gradient-primary rounded-3xl p-8 sm:p-10 text-center shadow-elevated">
+            <h3 className="font-serif text-2xl font-bold text-primary-foreground mb-2">Hospital OPD Timings</h3>
+            <p className="text-primary-foreground/80 text-sm max-w-lg mx-auto mb-4">
+              Monday to Saturday: 9:00 AM – 4:00 PM | Casualty & Emergency: 24x7
+            </p>
+            <p className="text-xs text-white/70">
+              Address: Ishan Campus, Abhimanyu Crossing, Knowledge Park I, Greater Noida, UP – 201310
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  };
+
+  const defaultOrder = ["header", "quickHelp", "formSection", "guidelines", "opdHoursCard"];
+
+  return (
+    <Layout>
+      <DynamicPageSections
+        pageId="appointment"
+        defaultSections={defaultSections}
+        defaultOrder={defaultOrder}
+      />
     </Layout>
   );
 };

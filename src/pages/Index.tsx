@@ -9,23 +9,43 @@ import Accreditations from "@/components/home/Accreditations";
 import InstitutionalProfile from "@/components/home/InstitutionalProfile";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LifeAtIshan from "@/components/home/LifeAtIshan";
-import PageGallery from "@/components/PageGallery";
+import DynamicPageSections from "@/components/DynamicPageSections";
+
+const defaultSections = {
+  banner: <Hero />,
+  stats: <StatsBar />,
+  institutionalProfile: <InstitutionalProfile />,
+  whyChooseUs: <WhyChooseUs />,
+  departments: <Departments />,
+  panchkarmaHighlight: <PanchkarmaHighlight />,
+  doctors: <DoctorsSection />,
+  testimonials: <Testimonials />,
+  gallery: <LifeAtIshan />,
+  accreditations: <Accreditations />,
+};
+
+const defaultOrder = [
+  "banner",
+  "stats",
+  "institutionalProfile",
+  "whyChooseUs",
+  "departments",
+  "panchkarmaHighlight",
+  "doctors",
+  "testimonials",
+  "gallery",
+  "accreditations",
+];
 
 const Index = () => {
   return (
     <Layout>
-      <Hero />
-      <StatsBar />
-      <InstitutionalProfile />
-      <WhyChooseUs />
-      <Departments />
-      <PanchkarmaHighlight />
-      <DoctorsSection />
-      <Testimonials />
-      <LifeAtIshan />
-      <Accreditations />
-    <PageGallery />
-      </Layout>
+      <DynamicPageSections
+        pageId="homepage"
+        defaultSections={defaultSections}
+        defaultOrder={defaultOrder}
+      />
+    </Layout>
   );
 };
 
