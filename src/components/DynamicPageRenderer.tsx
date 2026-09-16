@@ -1,4 +1,3 @@
-import PageSections from "./PageSections";
 import { useEffect, useState, useRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import Layout from "./Layout";
@@ -100,7 +99,6 @@ export default function DynamicPageRenderer({ portal }: { portal: string }) {
         <div className="min-h-[60vh] flex items-center justify-center">
           <div className="w-8 h-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
         </div>
-      <PageSections />
       </Layout>
     );
   }
@@ -171,7 +169,6 @@ export default function DynamicPageRenderer({ portal }: { portal: string }) {
           <div className="hidden">
           </div>
         </div>
-      <PageSections />
       </Layout>
     );
   }
@@ -200,7 +197,6 @@ export default function DynamicPageRenderer({ portal }: { portal: string }) {
             </div>
           </div>
         </div>
-      <PageSections />
       </Layout>
     );
   }
@@ -214,7 +210,6 @@ export default function DynamicPageRenderer({ portal }: { portal: string }) {
         <div className="w-full mt-[80px]">
           <RawHtmlIframe html={htmlToRender} title={data.title} />
         </div>
-      <PageSections />
       </Layout>
     );
   }
@@ -230,7 +225,6 @@ export default function DynamicPageRenderer({ portal }: { portal: string }) {
       <div className="pt-32 pb-20 min-h-[60vh] flex items-center justify-center">
         <p className="text-slate-500">Unknown template: {data.template}</p>
       </div>
-    <PageSections />
       </Layout>
   );
 }

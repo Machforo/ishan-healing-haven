@@ -60,7 +60,7 @@ export default function DynamicPageSections({
         }
 
         // Built-in gallery section placed in layout
-        if (sec.id === "gallery" || sec.id === "page_gallery") {
+        if (sec.id === "gallery" || sec.id === "page_gallery" || sec.type === "gallery" || sec.id.includes("gallery")) {
           renderedIds.add(sec.id);
           return <PageGallery key={sec.id} isInline={true} />;
         }

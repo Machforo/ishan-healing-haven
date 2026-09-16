@@ -1,3 +1,4 @@
+import PageGallery from "@/components/PageGallery";
 import { SectionLayoutItem } from "@/hooks/usePageLayout";
 import { rt } from "@/lib/richText";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -277,6 +278,12 @@ export default function CustomSectionRenderer({ section }: { section: SectionLay
         <div className="rich-text" dangerouslySetInnerHTML={{ __html: rt(section.htmlContent) }} />
       </section>
     );
+  }
+
+  
+  // Gallery Section (Inline custom or built-in)
+  if (section.type === "gallery" || section.id === "gallery" || section.id === "page_gallery" || section.id.includes("gallery")) {
+    return <PageGallery isInline={true} images={section.items} title={section.heading || section.name} />;
   }
 
   return null;
