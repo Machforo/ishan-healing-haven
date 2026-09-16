@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { usePageLayout, SectionLayoutItem } from "@/hooks/usePageLayout";
 import CustomSectionRenderer from "@/components/CustomSectionRenderer";
+import PageGallery from "@/components/PageGallery";
 
 interface DynamicPageSectionsProps {
   pageId: string;
@@ -27,20 +28,48 @@ export default function DynamicPageSections({
   }
 
   const sections: SectionLayoutItem[] = layoutData.sections;
+  const renderedIds = new Set<string>();
 
   return (
     <>
       {sections.map((sec) => {
         // Skip hidden sections
-        if (sec.isHidden) return null;
+        if (sec.isHidden) {
+          renderedIds.add(sec.id);
+          renderedIds.add(sec.id.replace(/-/g, "_"));
+          renderedIds.add(sec.id.replace(/_/g, "-"));
+          return null;
+        }
 
-        // If it's a built-in section registered in defaultSections, render it
-        if (sec.type === "builtin" && defaultSections[sec.id]) {
-          return <React.Fragment key={sec.id}>{defaultSections[sec.id]}</React.Fragment>;
+        // Direct or aliased match (hyphen vs underscore)
+        const direct = defaultSections[sec.id];
+        const under = defaultSections[sec.id.replace(/-/g, "_")];
+        const dash = defaultSections[sec.id.replace(/_/g, "-")];
+        const target = direct || under || dash;
+
+        if (target) {
+          renderedIds.add(sec.id);
+          renderedIds.add(sec.id.replace(/-/g, "_"));
+          renderedIds.add(sec.id.replace(/_/g, "-"));
+          return <React.Fragment key={sec.id}>{target}</React.Fragment>;
+        }
+
+        // Built-in gallery section placed in layout
+        if (sec.id === "gallery" || sec.id === "page_gallery") {
+          renderedIds.add(sec.id);
+          return <PageGallery key={sec.id} isInline={true} />;
         }
 
         // Otherwise, render custom section (custom_html, hero, split, cards, cta, faq)
         return <CustomSectionRenderer key={sec.id} section={sec} />;
+      })}
+
+      {/* Render any default sections that were not in backend layout and not hidden */}
+      {defaultOrder.map((id) => {
+        if (!renderedIds.has(id) && defaultSections[id]) {
+          return <React.Fragment key={id}>{defaultSections[id]}</React.Fragment>;
+        }
+        return null;
       })}
     </>
   );
