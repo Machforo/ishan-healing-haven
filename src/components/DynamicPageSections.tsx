@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 import { usePageLayout, SectionLayoutItem } from "@/hooks/usePageLayout";
 import CustomSectionRenderer from "@/components/CustomSectionRenderer";
 import PageGallery from "@/components/PageGallery";
@@ -14,6 +15,10 @@ export default function DynamicPageSections({
   defaultSections,
   defaultOrder
 }: DynamicPageSectionsProps) {
+  const location = useLocation();
+  if (typeof window !== 'undefined') {
+    (window as any).__renderedDynamicPagePath = location.pathname;
+  }
   const { data: layoutData, isLoading } = usePageLayout(pageId);
 
   // If loading or no valid sections array received, render default order
